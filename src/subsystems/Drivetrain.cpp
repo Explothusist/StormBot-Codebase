@@ -26,10 +26,10 @@ void Drivetrain::setDrive(int x_power, int y_power, int r_power) {
     int power_bl =  y_power + -x_power + r_power;
     int power_br = -y_power + -x_power + r_power;
 
-    power_fl = std::min((power_fl / 200) * 100 * constants::Drivetrain_Speed, 100);
-    power_fr = std::min((power_fr / 200) * 100 * constants::Drivetrain_Speed, 100);
-    power_bl = std::min((power_bl / 200) * 100 * constants::Drivetrain_Speed, 100);
-    power_br = std::min((power_br / 200) * 100 * constants::Drivetrain_Speed, 100);
+    power_fl = std::min((power_fl / 200.0) * 100.0 * constants::Drivetrain_Speed, 100.0);
+    power_fr = std::min((power_fr / 200.0) * 100.0 * constants::Drivetrain_Speed, 100.0);
+    power_bl = std::min((power_bl / 200.0) * 100.0 * constants::Drivetrain_Speed, 100.0);
+    power_br = std::min((power_br / 200.0) * 100.0 * constants::Drivetrain_Speed, 100.0);
 
     m_motor_fl.spin(vex::directionType::fwd, power_fl, vex::velocityUnits::pct);
     m_motor_fr.spin(vex::directionType::fwd, power_fr, vex::velocityUnits::pct);

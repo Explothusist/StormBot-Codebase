@@ -8,7 +8,7 @@
 /*----------------------------------------------------------------------------*/
 #include "vex.h"
 
-#include "FRClib/FRClib.h"
+#include "FRClib/frclib.h"
 #include "StormBot.h"
 
 #include "subsystems/Drivetrain.h"

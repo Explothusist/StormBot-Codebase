@@ -12,16 +12,16 @@ namespace frclib {
     StickTrigger::StickTrigger(StickIndicator stick, StickEvent event, Command* command):
         m_stick{ stick },
         m_event{ event },
-        m_command{ command },
-        m_type{ OnTrigger }
+        m_type{ OnTrigger },
+        m_command{ command }
     {
 
     };
     StickTrigger::StickTrigger(StickIndicator stick, StickEvent event, TriggerType type, Command* command):
         m_stick{ stick },
         m_event{ event },
-        m_command{ command },
-        m_type{ type }
+        m_type{ type },
+        m_command{ command }
     {
 
     };
@@ -46,16 +46,16 @@ namespace frclib {
     ButtonTrigger::ButtonTrigger(ButtonIndicator button, ButtonEvent event, Command* command):
         m_button{ button },
         m_event{ event },
-        m_command{ command },
-        m_type{ OnTrigger }
+        m_type{ OnTrigger },
+        m_command{ command }
     {
 
     };
     ButtonTrigger::ButtonTrigger(ButtonIndicator button, ButtonEvent event, TriggerType type, Command* command):
         m_button{ button },
         m_event{ event },
-        m_command{ command },
-        m_type{ type }
+        m_type{ type },
+        m_command{ command }
     {
 
     };

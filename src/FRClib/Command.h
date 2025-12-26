@@ -14,7 +14,7 @@ namespace frclib {
         public:
             Command(); // Put subsystems as parameters
             Command(Command& command); // Copy constructor
-            ~Command();
+            virtual ~Command();
 
             bool runLoop();
 

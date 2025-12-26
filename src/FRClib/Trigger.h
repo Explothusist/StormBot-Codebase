@@ -55,7 +55,7 @@ namespace frclib {
     class Trigger {
         public:
             Trigger();
-            ~Trigger();
+            virtual ~Trigger();
 
             bool matchesEvent(StickIndicator stick, StickEvent event);
             bool matchesEvent(ButtonIndicator stick, ButtonEvent event);
