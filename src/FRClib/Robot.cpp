@@ -1,0 +1,260 @@
+
+#include "Robot.h"
+
+namespace frclib {
+
+    vex::competition m_competition;
+    TimedRobot* current_robot{ nullptr };
+
+    void InstigateRobot(TimedRobot* robot) {
+        current_robot = robot;
+        m_competition.autonomous(translateAutonomous);
+        m_competition.drivercontrol(translateTeleop);
+    };
+    void translateAutonomous() {
+        // FANCY LOOP current_robot->handleState(Autonomous);
+    };
+    void translateTeleop() {
+        // FANCY LOOP current_robot->handleState(Teleop);
+    };
+
+    TimedRobot::TimedRobot():
+        m_subsystems{ },
+        m_commands{ },
+        m_joysticks{ },
+        m_autonomous_command{ new Command() },
+        m_brain{ vex::brain() },
+        m_state{ Disabled },
+        m_frame_delay{ 20 }
+    {
+        // Create your VEX components here
+        // Actually no, the VEX components will be in the subsystems
+
+        // InstigateRobot(this);
+
+        // robotInternal(true); // FANCY LOOP 
+        // robotInternal(); // startLoop()
+    };
+    TimedRobot::~TimedRobot() {
+        m_reseting_state_loop = true;
+        clearCommands();
+        for (Subsystem* subsystem : m_subsystems) {
+            delete subsystem;
+        }
+        m_subsystems.clear();
+        for (Joystick* joystick : m_joysticks) {
+            delete joystick;
+        }
+        m_joysticks.clear();
+        delete m_autonomous_command;
+        m_autonomous_command = nullptr;
+    };
+
+    void TimedRobot::handleState(RobotState state) {
+        if (state == Autonomous) {
+            m_state = Autonomous;
+        }else if (state == Teleop) {
+            m_state = Teleop;
+        }
+        // FANCY LOOP m_reseting_state_loop = true; // Prevents all instances of robotInternal() except the one it is about to create
+        m_had_state_chage = true; // Runs the Init of the state it is entering
+        // FANCY LOOP vex::wait(m_frame_delay, vex::msec); // Ensures catching all other instances
+        // FANCY LOOP robotInternal(true);
+    };
+
+    void TimedRobot::pollState() { // FANCY LOOP
+        if (m_competition.isEnabled()) {
+            if (m_competition.isAutonomous()) {
+                m_state = Autonomous;
+            }else if (m_competition.isDriverControl()) {
+                m_state = Teleop;
+            }
+        }else {
+            m_state = Disabled;
+        }
+        if (m_state != m_old_state) {
+            m_had_state_chage = true;
+
+            switch (m_old_state) {
+                case Disabled:
+                    disabledExit(); // User-made
+                    break;
+                case Autonomous:
+                    autonomousExit(); // User-made
+                    break;
+                case Teleop:
+                    teleopExit(); // User-made
+                    break;
+            }
+        }
+    };
+
+    void TimedRobot::startLoop() {
+        robotInternal();
+    };
+
+    void TimedRobot::robotInternal() { // bool is_original
+        while (true) {
+            // if (m_reseting_state_loop && !is_original) {
+            //     return; // Kill the loop if it has been replaced by a new one
+            // }
+
+            pollState(); // FANCY LOOP
+
+            // Experimental setup for approaching setInterval more closely, also somewhat dangerous
+            // Replaces code at bottom
+            // m_reseting_state_loop = false; // Up here is allowed because of wait in handleState()
+            // vex::wait(m_frame_delay, vex::msec); // Wait for prior frame to finish
+            // robotInternal(false); // Start timer for next frame
+
+            robotPeriodic(); // User-made
+            switch (m_state) {
+                case Disabled:
+                    disabledInternal();
+                    break;
+                case Autonomous:
+                    autonomousInternal();
+                    break;
+                case Teleop:
+                    teleopInternal();
+                    break;
+            }
+            if (m_state != Disabled) {
+                pollJoystickEvents();
+
+                runDefaultCommands();
+
+                commandScheduler();
+            }
+
+            vex::wait(m_frame_delay, vex::msec); // Some strange VEX wizardy that is very suspicious
+            // if (m_reseting_state_loop) {
+            //     m_reseting_state_loop = false; // Prevent this loop from killing itself AFTER the wait so that other are cleared
+            // }
+            // robotInternal(false);
+        }
+    };
+    void TimedRobot::disabledInternal() {
+        if (m_had_state_chage) {
+            clearCommands();
+            disabledInit(); // User-made
+        }
+
+        disabledPeriodic(); // User-made
+    };
+    void TimedRobot::autonomousInternal() {
+        if (m_had_state_chage) {
+            clearCommands();
+            runCommand(m_autonomous_command);
+            autonomousInit(); // User-made function
+        }
+
+        autonomousPeriodic(); // User-made
+    };
+    void TimedRobot::teleopInternal() {
+        if (m_had_state_chage) {
+            clearCommands();
+            teleopInit(); // User-made
+        }
+
+        teleopPeriodic(); // User-made
+    };
+
+    void TimedRobot::commandScheduler() {
+        for (int i = 0; i < static_cast<int>(m_commands.size()); i++) {
+            bool finished = m_commands[i]->runLoop();
+            if (finished) {
+                delete m_commands[i];
+                m_commands.erase(std::next(m_commands.begin(), i-1));
+                i -= 1;
+            }
+        }
+    };
+    void TimedRobot::clearCommands() {
+        for (Command* command : m_commands) {
+            delete command; // Remember, these are pointers!
+        }
+        m_commands.clear();
+    };
+    void TimedRobot::runDefaultCommands() {
+        for (Subsystem* subsystem : m_subsystems) {
+            subsystem->runPeriodic();
+            if (subsystem->hasDefaultCommand() && !subsystemHasCommand(subsystem)) { // Checks and runs default command
+                runCommand(subsystem->getDefaultCommand());
+            }
+        }
+    };
+    void TimedRobot::pollJoystickEvents() {
+        for (Joystick* joystick : m_joysticks) {
+            std::vector<Command*> commands = joystick->pollEvents();
+            for (Command* command : commands) {
+                runCommand(command);
+            }
+        }
+    };
+
+    void TimedRobot::runCommand(Command* command) {
+        std::vector<Subsystem*> command_subs = command->getSubsystems();
+        for (Subsystem* subsystem : command_subs) { // Ensure all subsystems are registered (primarily to force good practice)
+            if (!robotHasSubsystem(subsystem)) {
+                printf("ERROR: TimedRobot: runCommand: Command references unregistered Subsystem");
+                return;
+            }
+        }
+        for (int i = 0; i < static_cast<int>(m_commands.size()); i++) { // End all current commands using said subsystems
+            if (command->hasMatchingSubsystems(m_commands[i])) {
+                delete m_commands[i]; // Will run ~Command, which runs end()
+                m_commands.erase(std::next(m_commands.begin(), i-1));
+                i -= 1;
+            }
+        }
+        m_commands.push_back(command);
+    };
+    void TimedRobot::registerSubsystem(Subsystem* subsystem) {
+        if (!robotHasSubsystem(subsystem)) {
+            m_subsystems.push_back(subsystem); // To ensure no duplicates
+        }
+    };
+    void TimedRobot::addJoystick(Joystick* joystick) {
+        if (!robotHasJoystick(joystick)) {
+            m_joysticks.push_back(joystick); // To ensure no duplicates
+        }
+    };
+
+    bool TimedRobot::robotHasSubsystem(Subsystem* subsystem) {
+        for (Subsystem* search : m_subsystems) {
+            if (search == subsystem) {
+                return true;
+            }
+        }
+        return false;
+    };
+    bool TimedRobot::subsystemHasCommand(Subsystem* subsystem) {
+        for (Command* command : m_commands) {
+            if (command->hasSubsystem(subsystem)) {
+                return true;
+            }
+        }
+        return false;
+    };
+    bool TimedRobot::robotHasJoystick(Joystick* joystick) {
+        for (Joystick* search : m_joysticks) {
+            if (search == joystick) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+
+    void TimedRobot::robotPeriodic() {};
+    void TimedRobot::disabledInit() {};
+    void TimedRobot::disabledPeriodic() {};
+    void TimedRobot::disabledExit() {};
+    void TimedRobot::autonomousInit() {};
+    void TimedRobot::autonomousPeriodic() {};
+    void TimedRobot::autonomousExit() {};
+    void TimedRobot::teleopInit() {};
+    void TimedRobot::teleopPeriodic() {};
+    void TimedRobot::teleopExit() {};
+}
