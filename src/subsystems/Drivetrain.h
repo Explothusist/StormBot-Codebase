@@ -1,6 +1,6 @@
 
-#ifndef DRIVETRAIN_
-#define DRIVETRAIN_
+#ifndef STORMBOT_DRIVETRAIN_
+#define STORMBOT_DRIVETRAIN_
 
 #include "../FRClib/Subsystem.h"
 #include "vex.h"

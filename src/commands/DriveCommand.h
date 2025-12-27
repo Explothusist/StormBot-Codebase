@@ -6,24 +6,20 @@
 #include "../FRClib/Joystick.h"
 #include "../subsystems/Drivetrain.h"
 
-namespace frclib {
+class DriveCommand : public frclib::Command {
+    public:
+        DriveCommand(Drivetrain* drivetrain, frclib::Joystick* driver_controller); // Put subsystems as parameters
+        DriveCommand(DriveCommand& command); // Copy constructor
+        ~DriveCommand();
 
-    class DriveCommand : public Command {
-        public:
-            DriveCommand(Drivetrain* drivetrain, Joystick* driver_controller); // Put subsystems as parameters
-            DriveCommand(DriveCommand& command); // Copy constructor
-            ~DriveCommand();
-
-            void initialize() override; // User-made
-            void execute() override; // User-made
-            void end(bool interrupted) override; // User-made
-            bool is_finished() override; // User-made
-            
-        private:
-            Drivetrain* m_drivetrain;
-            Joystick* m_driver_controller;
-    };
-
-}
+        void initialize() override; // User-made
+        void execute() override; // User-made
+        void end(bool interrupted) override; // User-made
+        bool is_finished() override; // User-made
+        
+    private:
+        Drivetrain* m_drivetrain;
+        frclib::Joystick* m_driver_controller;
+};
 
 #endif
