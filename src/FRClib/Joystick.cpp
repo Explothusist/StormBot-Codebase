@@ -457,6 +457,13 @@ namespace frclib {
         m_triggers.push_back(new ButtonTrigger(StartCommand, button, event, type, command));
     };
 
+    void Joystick::bindAutoTrigger(StickIndicator stick, StickEvent event) {
+        m_temp_triggers.push_back(new StickTrigger(StartAutonomous, stick, event));
+    };
+    void Joystick::bindAutoTrigger(ButtonIndicator button, ButtonEvent event) {
+        m_temp_triggers.push_back(new ButtonTrigger(StartAutonomous, button, event));
+    };
+
     void Joystick::setAxis12(int axis1, int axis2) {
         m_axis_position[Axis1] = axis1;
         m_axis_position[Axis2] = axis2;

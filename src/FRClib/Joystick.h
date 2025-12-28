@@ -31,6 +31,9 @@ namespace frclib {
             void bindKey(ButtonIndicator button, ButtonEvent event, Command* command);
             void bindKey(ButtonIndicator button, ButtonEvent event, TriggerType type, Command* command);
 
+            void bindAutoTrigger(StickIndicator stick, StickEvent event);
+            void bindAutoTrigger(ButtonIndicator button, ButtonEvent event);
+
             void triggerEvent(StickIndicator stick, StickEvent event);
             void triggerEvent(ButtonIndicator button, ButtonEvent event);
 

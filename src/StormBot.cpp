@@ -1,8 +1,10 @@
 
 #include "StormBot.h"
 
+#include "Constants.h"
+
 StormBot::StormBot():
-    frclib::TimedRobot()
+    frclib::TimedRobot(false, constants::AutonomousLength)
 {
     
 };

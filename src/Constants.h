@@ -6,6 +6,9 @@
 
 namespace constants {
 
+    // Robot
+    int const AutonomousLength = 30; // Seconds
+
     // Drivetrain
     int const MotorBL_Port = vex::PORT1;
     int const MotorBR_Port = vex::PORT2;

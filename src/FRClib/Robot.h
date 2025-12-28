@@ -24,6 +24,7 @@ namespace frclib {
         public:
             TimedRobot();
             TimedRobot(bool use_vex_competition);
+            TimedRobot(bool use_vex_competition, int autonomous_length);
             ~TimedRobot();
 
             // void robotInit(); // Use constructor instead
@@ -68,6 +69,9 @@ namespace frclib {
             int m_frame_delay;
 
             bool m_uses_vex_competition;
+            bool m_first_auto_trigger;
+            int m_autonomous_length;
+            bool m_start_of_auto;
 
             // int m_command_id_counter;
 

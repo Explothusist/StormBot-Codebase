@@ -19,11 +19,16 @@ namespace frclib {
     };
 
     TimedRobot::TimedRobot():
-        TimedRobot(false)
+        TimedRobot(false, 0)
     {
 
     };
     TimedRobot::TimedRobot(bool use_vex_competition):
+        TimedRobot(use_vex_competition, 0)
+    {
+
+    };
+    TimedRobot::TimedRobot(bool use_vex_competition, int autonomous_length):
         m_subsystems{ },
         m_commands{ },
         m_joysticks{ },
@@ -34,7 +39,10 @@ namespace frclib {
         m_reseting_state_loop{ false },
         m_had_state_chage{ false },
         m_frame_delay{ 20 },
-        m_uses_vex_competition{ use_vex_competition }
+        m_uses_vex_competition{ use_vex_competition },
+        m_first_auto_trigger{ true },
+        m_autonomous_length{ autonomous_length },
+        m_start_of_auto{ 0 }
         // m_command_id_counter{ 0 }
     {
 
@@ -77,6 +85,26 @@ namespace frclib {
             }else {
                 m_state = Disabled;
             }
+        }else {
+            if (m_first_auto_trigger) {
+                bool triggered = false;
+                for (Joystick* joystick : m_joysticks) {
+                    triggered = (triggered || joystick->pollAutonomousTriggers());
+                }
+
+                if (triggered) {
+                    m_state = Autonomous;
+                    m_first_auto_trigger = false;
+                    
+                    m_start_of_auto = vex::timer::system();
+                }
+            }else if (m_state == Autonomous) {
+                int now = vex::timer::system();
+
+                if (now-m_start_of_auto > (m_autonomous_length*1000)) {
+                    m_state = Teleop;
+                }
+            }
         }
 
         if (m_state != m_old_state) {
@@ -97,7 +125,11 @@ namespace frclib {
     };
 
     void TimedRobot::startLoop() {
-        
+        if (!m_uses_vex_competition) {
+            for (Joystick* joystick : m_joysticks) {
+                joystick->bindAutoTrigger(AButton, ButtonPressed);
+            }
+        }
 
         robotInternal();
     };
