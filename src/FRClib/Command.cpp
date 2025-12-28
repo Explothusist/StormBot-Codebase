@@ -5,7 +5,8 @@ namespace frclib {
 
     Command::Command(): // Put Subsystems as parameters
         m_is_first_run{ true }, // Will be overriden, marks when to run initialize
-        m_was_interrupted{ true } // Set to false when exiting normally, ensures end() runs once
+        m_was_interrupted{ true }, // Set to false when exiting normally, ensures end() runs once
+        m_id{ -1 }
     {
         // usesSubsystem(ex_subsystem); // Call repeatedly for each Subsystem used
     };
@@ -60,6 +61,13 @@ namespace frclib {
     void Command::usesSubsystem(Subsystem* subsystem) {
         m_subsystems.push_back(subsystem);
     }
+
+    void Command::setId(int id) {
+        m_id = id;
+    };
+    int Command::getId() {
+        return m_id;
+    };
 
     void Command::initialize() {};
     void Command::execute() {};

@@ -57,9 +57,11 @@ namespace frclib {
             Trigger();
             virtual ~Trigger();
 
-            bool matchesEvent(StickIndicator stick, StickEvent event);
-            bool matchesEvent(ButtonIndicator stick, ButtonEvent event);
-            Command* getCommand();
+            virtual bool matchesEvent(StickIndicator stick, StickEvent event);
+            virtual bool matchesEvent(ButtonIndicator stick, ButtonEvent event);
+            virtual Command* getCommand();
+
+            virtual TriggerType getTriggerType();
         private:
     };
     class StickTrigger : public Trigger {
@@ -68,9 +70,11 @@ namespace frclib {
             StickTrigger(StickIndicator stick, StickEvent event, TriggerType type, Command* command);
             ~StickTrigger();
 
-            bool matchesEvent(StickIndicator stick, StickEvent event);
-            bool matchesEvent(ButtonIndicator button, ButtonEvent event);
-            Command* getCommand();
+            bool matchesEvent(StickIndicator stick, StickEvent event) override;
+            bool matchesEvent(ButtonIndicator button, ButtonEvent event) override;
+            Command* getCommand() override;
+
+            TriggerType getTriggerType() override;
         private:
             StickIndicator m_stick;
             StickEvent m_event;
@@ -80,19 +84,56 @@ namespace frclib {
     };
     class ButtonTrigger : public Trigger {
         public:
-            ButtonTrigger(ButtonIndicator stick, ButtonEvent event, Command* command);
-            ButtonTrigger(ButtonIndicator stick, ButtonEvent event, TriggerType type, Command* command);
+            ButtonTrigger(ButtonIndicator button, ButtonEvent event, Command* command);
+            ButtonTrigger(ButtonIndicator button, ButtonEvent event, TriggerType type, Command* command);
             ~ButtonTrigger();
 
-            bool matchesEvent(StickIndicator stick, StickEvent event);
-            bool matchesEvent(ButtonIndicator button, ButtonEvent event);
-            Command* getCommand();
+            bool matchesEvent(StickIndicator stick, StickEvent event) override;
+            bool matchesEvent(ButtonIndicator button, ButtonEvent event) override;
+            Command* getCommand() override;
+
+            TriggerType getTriggerType() override;
         private:
             ButtonIndicator m_button;
             ButtonEvent m_event;
             TriggerType m_type;
 
             Command* m_command;
+    };
+
+
+    class EndingTrigger {
+        public:
+            EndingTrigger(int command_id);
+            virtual ~EndingTrigger();
+
+            virtual bool matchesEvent(StickIndicator stick, StickEvent event);
+            virtual bool matchesEvent(ButtonIndicator stick, ButtonEvent event);
+            int getCommandId();
+        private:
+            int m_command_id;
+    };
+    class StickEndingTrigger : public EndingTrigger {
+        public:
+            StickEndingTrigger(StickIndicator stick, StickEvent event, int command_id);
+            ~StickEndingTrigger();
+
+            bool matchesEvent(StickIndicator stick, StickEvent event) override;
+            bool matchesEvent(ButtonIndicator button, ButtonEvent event) override;
+        private:
+            StickIndicator m_stick;
+            StickEvent m_event;
+    };
+    class ButtonEndingTrigger : public EndingTrigger {
+        public:
+            ButtonEndingTrigger(ButtonIndicator button, ButtonEvent event, int command_id);
+            ~ButtonEndingTrigger();
+
+            bool matchesEvent(StickIndicator stick, StickEvent event) override;
+            bool matchesEvent(ButtonIndicator button, ButtonEvent event) override;
+        private:
+            ButtonIndicator m_button;
+            ButtonEvent m_event;
     };
 
 }

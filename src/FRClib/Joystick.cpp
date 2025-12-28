@@ -5,6 +5,8 @@
 
 namespace frclib {
 
+    int global_command_id_counter = 0;
+
     vex::controller m_controller_primary = vex::controller(vex::primary);
     vex::controller m_controller_partner = vex::controller(vex::partner);
     Joystick* current_joystick_primary{ nullptr };
@@ -329,7 +331,13 @@ namespace frclib {
 
     Joystick::Joystick(JoystickType type):
         m_controller{ vex::controller() },
-        m_triggers{ }
+        m_triggers{ },
+        m_temp_triggers{ },
+        m_triggered_commands{ },
+        m_command_terminations{ },
+        m_stick_state{ },
+        m_axis_position{ },
+        m_button_state{ }
     {
         for (int i = 0; i < 2; i++) {
             m_stick_state[i] = StickCenter;
@@ -354,59 +362,58 @@ namespace frclib {
         std::vector<Command*> commands = m_triggered_commands;
         m_triggered_commands.clear();
         return commands;
-
-        // std::vector<Command*> triggered_events;
-
-        // bool button_a_state = m_controller.ButtonA.pressing();
-        // if (button_a_state && m_button_state[AButton] == ButtonReleased) {
-        //     m_button_state[AButton] = ButtonPressed;
-        //     triggerEvent(AButton, ButtonPressed);
-        // }else if (!button_a_state && m_button_state[AButton] == ButtonPressed) {
-        //     m_button_state[AButton] = ButtonPressed;
-        //     triggerEvent(AButton, ButtonPressed);
-        // }
-        
-        // bool button_b_state = m_controller.ButtonB.pressing();
-        // if (button_b_state && m_button_state[BButton] == ButtonReleased) {
-        //     m_button_state[BButton] = ButtonPressed;
-        //     triggerEvent(BButton, ButtonPressed);
-        // }else if (!button_b_state && m_button_state[BButton] == ButtonPressed) {
-        //     m_button_state[BButton] = ButtonPressed;
-        //     triggerEvent(BButton, ButtonPressed);
-        // }
-        
-        // bool button_x_state = m_controller.ButtonX.pressing();
-        // if (button_x_state && m_button_state[XButton] == ButtonReleased) {
-        //     m_button_state[XButton] = ButtonPressed;
-        //     triggerEvent(XButton, ButtonPressed);
-        // }else if (!button_x_state && m_button_state[XButton] == ButtonPressed) {
-        //     m_button_state[XButton] = ButtonPressed;
-        //     triggerEvent(XButton, ButtonPressed);
-        // }
-        
-        // bool button_y_state = m_controller.ButtonY.pressing();
-        // if (button_y_state && m_button_state[YButton] == ButtonReleased) {
-        //     m_button_state[YButton] = ButtonPressed;
-        //     triggerEvent(YButton, ButtonPressed);
-        // }else if (!button_y_state && m_button_state[YButton] == ButtonPressed) {
-        //     m_button_state[YButton] = ButtonPressed;
-        //     triggerEvent(YButton, ButtonPressed);
-        // }
+    };
+    std::vector<int> Joystick::pollEventTerminations() {
+        std::vector<int> commands = m_command_terminations;
+        m_command_terminations.clear();
+        return commands;
     };
 
     void Joystick::triggerEvent(StickIndicator stick, StickEvent event) {
         m_stick_state[stick] = event;
+        for (int i = 0; i < static_cast<int>(m_temp_triggers.size()); i++) {
+            if (m_temp_triggers[i]->matchesEvent(stick, event)) {
+                m_command_terminations.push_back(m_temp_triggers[i]->getCommandId());
+                delete m_temp_triggers[i];
+                m_temp_triggers.erase(std::next(m_temp_triggers.begin(), i-1));
+                i -= 1;
+            }
+        }
+
         for (Trigger* trigger : m_triggers) {
             if (trigger->matchesEvent(stick, event)) {
-                m_triggered_commands.push_back(trigger->getCommand());
+                Command* command = trigger->getCommand();
+                command->setId(global_command_id_counter);
+                global_command_id_counter += 1;
+                m_triggered_commands.push_back(command);
+                
+                if (trigger->getTriggerType() == WhileTrigger) {
+                    m_temp_triggers.push_back(new StickEndingTrigger(stick, event, command->getId()));
+                }
             }
         }
     };
     void Joystick::triggerEvent(ButtonIndicator button, ButtonEvent event) {
         m_button_state[button] = event;
+        for (int i = 0; i < static_cast<int>(m_temp_triggers.size()); i++) {
+            if (m_temp_triggers[i]->matchesEvent(button, event)) {
+                m_command_terminations.push_back(m_temp_triggers[i]->getCommandId());
+                delete m_temp_triggers[i];
+                m_temp_triggers.erase(std::next(m_temp_triggers.begin(), i-1));
+                i -= 1;
+            }
+        }
+
         for (Trigger* trigger : m_triggers) {
             if (trigger->matchesEvent(button, event)) {
-                m_triggered_commands.push_back(trigger->getCommand());
+                Command* command = trigger->getCommand();
+                command->setId(global_command_id_counter);
+                global_command_id_counter += 1;
+                m_triggered_commands.push_back(command);
+                
+                if (trigger->getTriggerType() == WhileTrigger) {
+                    m_temp_triggers.push_back(new ButtonEndingTrigger(button, event, command->getId()));
+                }
             }
         }
     };

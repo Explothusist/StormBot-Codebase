@@ -23,6 +23,7 @@ namespace frclib {
             ~Joystick();
 
             std::vector<Command*> pollEvents();
+            std::vector<int> pollEventTerminations();
 
             void bindKey(StickIndicator stick, StickEvent event, Command* command);
             void bindKey(StickIndicator stick, StickEvent event, TriggerType type, Command* command);
@@ -42,7 +43,9 @@ namespace frclib {
             vex::controller m_controller;
 
             std::vector<Trigger*> m_triggers;
+            std::vector<EndingTrigger*> m_temp_triggers;
             std::vector<Command*> m_triggered_commands;
+            std::vector<int> m_command_terminations;
 
             StickEvent m_stick_state[2];
             int m_axis_position[4];

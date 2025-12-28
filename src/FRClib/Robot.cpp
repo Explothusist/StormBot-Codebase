@@ -25,7 +25,11 @@ namespace frclib {
         m_autonomous_command{ new Command() },
         m_brain{ vex::brain() },
         m_state{ Disabled },
+        m_old_state{ Disabled },
+        m_reseting_state_loop{ false },
+        m_had_state_chage{ false },
         m_frame_delay{ 20 }
+        // m_command_id_counter{ 0 }
     {
         // Create your VEX components here
         // Actually no, the VEX components will be in the subsystems
@@ -190,6 +194,11 @@ namespace frclib {
             for (Command* command : commands) {
                 runCommand(command);
             }
+
+            std::vector<int> terminations = joystick->pollEventTerminations();
+            for (int termination : terminations) {
+                endCommand(termination);
+            }
         }
     };
 
@@ -198,6 +207,7 @@ namespace frclib {
         for (Subsystem* subsystem : command_subs) { // Ensure all subsystems are registered (primarily to force good practice)
             if (!robotHasSubsystem(subsystem)) {
                 printf("ERROR: TimedRobot: runCommand: Command references unregistered Subsystem");
+                // return -1;
                 return;
             }
         }
@@ -208,7 +218,14 @@ namespace frclib {
                 i -= 1;
             }
         }
+
+        // Set Id for later reference
+        // int command_id = m_command_id_counter;
+        // command->setId(command_id);
+        // m_command_id_counter += 1;
+
         m_commands.push_back(command);
+        // return command_id;
     };
     void TimedRobot::registerSubsystem(Subsystem* subsystem) {
         if (!robotHasSubsystem(subsystem)) {
@@ -244,6 +261,16 @@ namespace frclib {
             }
         }
         return false;
+    };
+
+    void TimedRobot::endCommand(int command_id) {
+        for (int i = 0; i < static_cast<int>(m_commands.size()); i++) {
+            if (m_commands[i]->getId() == command_id) {
+                delete m_commands[i]; // Will run ~Command, which runs end()
+                m_commands.erase(std::next(m_commands.begin(), i-1));
+                i -= 1;
+            }
+        }
     };
 
 

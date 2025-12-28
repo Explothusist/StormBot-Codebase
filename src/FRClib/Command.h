@@ -28,11 +28,16 @@ namespace frclib {
             bool hasSubsystem(Subsystem* subsystem);
 
             void usesSubsystem(Subsystem* subsystem); // Call repeatedly for each subsystem used
+
+            void setId(int id); // For use by frclib::Robot
+            int getId();
         private:
             bool m_is_first_run;
             bool m_was_interrupted;
 
             std::vector<Subsystem*> m_subsystems;
+
+            int m_id;
     };
 
 }

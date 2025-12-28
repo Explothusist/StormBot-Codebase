@@ -48,6 +48,8 @@ namespace frclib {
             void registerSubsystem(Subsystem* subsystem);
             void addJoystick(Joystick* joystick);
 
+            void endCommand(int command_id); // Use the global Id assigned by Joystick
+
             void startLoop();
         private:
             std::vector<Subsystem*> m_subsystems;
@@ -63,6 +65,8 @@ namespace frclib {
             bool m_had_state_chage;
 
             int m_frame_delay;
+
+            // int m_command_id_counter;
 
             // void robotInternal(bool is_original);
             void robotInternal();
