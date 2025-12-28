@@ -3,12 +3,11 @@
 
 #include "../Constants.h"
 
-BoundingBox::BoundingBox(int center_x, int center_y, int width, int height, double angle = 0):
+BoundingBox::BoundingBox(int center_x, int center_y, int width, int height):
     m_center_x{ center_x },
     m_center_y{ center_y },
     m_width{ width },
-    m_height{ height },
-    m_angle{ angle }
+    m_height{ height }
 {
 
 };
@@ -34,12 +33,14 @@ double BoundingBox::getApproxDistance(int actual_width, int actual_height) {
 
 CameraReader::CameraReader():
     frclib::Subsystem(),
-    m_camera_front{ vex::aivision(constants::CameraFront_Port) }//,
-    // m_camera_left{ vex::aivision(constants::CameraLeft_Port) },
-    // m_camera_right{ vex::aivision(constants::CameraRight_Port) }
+    m_color_red{ vex::aivision::colordesc(1, 255, 0, 0, 20, 0.2) },
+    m_color_blue{ vex::aivision::colordesc(1, 0, 0, 255, 20, 0.2) },
+    m_camera_front{ vex::aivision(constants::CameraFront_Port, m_color_red, m_color_blue) }//,
+    // m_camera_left{ vex::aivision(constants::CameraLeft_Port, m_color_red, m_color_blue) },
+    // m_camera_right{ vex::aivision(constants::CameraRight_Port, m_color_red, m_color_blue) }
 {
-    m_camera_front.colorDetection(false);
-    m_camera_front.tagDetection(true);
+    // m_camera_front.colorDetection(false);
+    // m_camera_front.tagDetection(true);
     
     // m_camera_left.colorDetection(false);
     // m_camera_left.tagDetection(true);
@@ -64,8 +65,22 @@ BoundingBox* CameraReader::getLargestTagFront() {
             obj.centerX - (constants::Camera_Viewport_Width / 2),
             obj.centerY - (constants::Camera_Viewport_Height / 2),
             obj.width,
-            obj.height,
-            obj.angle
+            obj.height
+        );
+        return ret;
+    }
+    return nullptr;
+};
+BoundingBox* CameraReader::getLargestColorFront() {
+    m_camera_front.takeSnapshot(vex::aivision::ALL_COLORS);
+
+    if (m_camera_front.objectCount > 0) {
+        vex::aivision::object obj = m_camera_front.largestObject;
+        BoundingBox* ret = new BoundingBox( // (0, 0) is center of grid
+            obj.centerX - (constants::Camera_Viewport_Width / 2),
+            obj.centerY - (constants::Camera_Viewport_Height / 2),
+            obj.width,
+            obj.height
         );
         return ret;
     }

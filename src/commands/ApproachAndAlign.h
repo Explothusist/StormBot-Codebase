@@ -22,7 +22,9 @@ class ApproachAndAlign : public frclib::Command {
         CameraReader* m_cameras;
 
         int m_check_dist_counter;
-        int m_last_dist;
+        double m_last_dist;
+        int m_last_offset; // x
+        int m_invisibility_count;
 };
 
 #endif

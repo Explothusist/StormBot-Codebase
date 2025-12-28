@@ -7,7 +7,7 @@
 
 class BoundingBox {
     public:
-        BoundingBox(int center_x, int center_y, int width, int height, double angle = 0);
+        BoundingBox(int center_x, int center_y, int width, int height);
         ~BoundingBox();
 
         double getApproxDistance(int actual_width, int actual_height); // Returns in inches
@@ -16,7 +16,6 @@ class BoundingBox {
         int m_center_y;
         int m_width;
         int m_height;
-        double m_angle;
 };
 
 class CameraReader : public frclib::Subsystem {
@@ -27,8 +26,12 @@ class CameraReader : public frclib::Subsystem {
         void periodic() override;
 
         BoundingBox* getLargestTagFront();
+        BoundingBox* getLargestColorFront();
 
     private:
+        vex::aivision::colordesc m_color_red;
+        vex::aivision::colordesc m_color_blue;
+
         vex::aivision m_camera_front;
         // vex::aivision m_camera_left;
         // vex::aivision m_camera_right;
