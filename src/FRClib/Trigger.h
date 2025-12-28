@@ -52,88 +52,101 @@ namespace frclib {
         Axis4
     } AxisIndicator;
 
+    typedef enum {
+        StartCommand,
+        EndCommand,
+        StartAutonomous
+    } TriggerEffect;
+
     class Trigger {
         public:
-            Trigger();
+            Trigger(TriggerEffect effect);
+            Trigger(TriggerEffect effect, TriggerType type, Command* command);
+            Trigger(TriggerEffect effect, int m_command_id);
             virtual ~Trigger();
 
             virtual bool matchesEvent(StickIndicator stick, StickEvent event);
             virtual bool matchesEvent(ButtonIndicator stick, ButtonEvent event);
-            virtual Command* getCommand();
+            TriggerEffect getTriggerEffect();
 
-            virtual TriggerType getTriggerType();
+            Command* getCommand();
+            TriggerType getTriggerType();
+            int getCommandId();
         private:
+            TriggerEffect m_effect;
+
+            TriggerType m_type; // Possible properties, not all used everywhere
+            Command* m_command;
+            int m_command_id;
     };
     class StickTrigger : public Trigger {
         public:
-            StickTrigger(StickIndicator stick, StickEvent event, Command* command);
-            StickTrigger(StickIndicator stick, StickEvent event, TriggerType type, Command* command);
+            StickTrigger(TriggerEffect effect, StickIndicator stick, StickEvent event, Command* command); // StartCommand
+            StickTrigger(TriggerEffect effect, StickIndicator stick, StickEvent event, TriggerType type, Command* command);
+            StickTrigger(TriggerEffect effect, StickIndicator stick, StickEvent event, int command_id); // EndCommand
+            StickTrigger(TriggerEffect effect, StickIndicator stick, StickEvent event); // StartAutonomous
             ~StickTrigger();
 
             bool matchesEvent(StickIndicator stick, StickEvent event) override;
             bool matchesEvent(ButtonIndicator button, ButtonEvent event) override;
-            Command* getCommand() override;
 
-            TriggerType getTriggerType() override;
-        private:
             StickIndicator m_stick;
             StickEvent m_event;
-            TriggerType m_type;
-
-            Command* m_command;
+        private:
     };
     class ButtonTrigger : public Trigger {
         public:
-            ButtonTrigger(ButtonIndicator button, ButtonEvent event, Command* command);
-            ButtonTrigger(ButtonIndicator button, ButtonEvent event, TriggerType type, Command* command);
+            ButtonTrigger(TriggerEffect effect, ButtonIndicator button, ButtonEvent event, Command* command); // StartCommand
+            ButtonTrigger(TriggerEffect effect, ButtonIndicator button, ButtonEvent event, TriggerType type, Command* command);
+            ButtonTrigger(TriggerEffect effect, ButtonIndicator button, ButtonEvent event, int command_id); // EndCommand
+            ButtonTrigger(TriggerEffect effect, ButtonIndicator button, ButtonEvent event); // StartAutonomous
             ~ButtonTrigger();
 
             bool matchesEvent(StickIndicator stick, StickEvent event) override;
             bool matchesEvent(ButtonIndicator button, ButtonEvent event) override;
-            Command* getCommand() override;
-
-            TriggerType getTriggerType() override;
-        private:
+            
             ButtonIndicator m_button;
             ButtonEvent m_event;
-            TriggerType m_type;
-
-            Command* m_command;
-    };
-
-
-    class EndingTrigger {
-        public:
-            EndingTrigger(int command_id);
-            virtual ~EndingTrigger();
-
-            virtual bool matchesEvent(StickIndicator stick, StickEvent event);
-            virtual bool matchesEvent(ButtonIndicator stick, ButtonEvent event);
-            int getCommandId();
         private:
-            int m_command_id;
     };
-    class StickEndingTrigger : public EndingTrigger {
+
+
+    // class EndingTrigger {
+    //     public:
+    //         EndingTrigger(int command_id);
+    //         virtual ~EndingTrigger();
+
+    //         virtual bool matchesEvent(StickIndicator stick, StickEvent event);
+    //         virtual bool matchesEvent(ButtonIndicator stick, ButtonEvent event);
+    //         int getCommandId();
+    //     private:
+    //         int m_command_id;
+    // };
+    class StickEndingTrigger : public StickTrigger{
         public:
-            StickEndingTrigger(StickIndicator stick, StickEvent event, int command_id);
+            StickEndingTrigger(TriggerEffect effect, StickIndicator stick, StickEvent event, Command* command); // StartCommand
+            StickEndingTrigger(TriggerEffect effect, StickIndicator stick, StickEvent event, TriggerType type, Command* command);
+            StickEndingTrigger(TriggerEffect effect, StickIndicator stick, StickEvent event, int command_id); // EndCommand
+            StickEndingTrigger(TriggerEffect effect, StickTrigger* trigger, int command_id); // EndCommand
+            StickEndingTrigger(TriggerEffect effect, StickIndicator stick, StickEvent event); // StartAutonomous
             ~StickEndingTrigger();
 
             bool matchesEvent(StickIndicator stick, StickEvent event) override;
             bool matchesEvent(ButtonIndicator button, ButtonEvent event) override;
         private:
-            StickIndicator m_stick;
-            StickEvent m_event;
     };
-    class ButtonEndingTrigger : public EndingTrigger {
+    class ButtonEndingTrigger : public ButtonTrigger {
         public:
-            ButtonEndingTrigger(ButtonIndicator button, ButtonEvent event, int command_id);
+            ButtonEndingTrigger(TriggerEffect effect, ButtonIndicator button, ButtonEvent event, Command* command); // StartCommand
+            ButtonEndingTrigger(TriggerEffect effect, ButtonIndicator button, ButtonEvent event, TriggerType type, Command* command);
+            ButtonEndingTrigger(TriggerEffect effect, ButtonIndicator button, ButtonEvent event, int command_id); // EndCommand
+            ButtonEndingTrigger(TriggerEffect effect, ButtonTrigger* trigger, int command_id); // EndCommand
+            ButtonEndingTrigger(TriggerEffect effect, ButtonIndicator button, ButtonEvent event); // StartAutonomous
             ~ButtonEndingTrigger();
 
             bool matchesEvent(StickIndicator stick, StickEvent event) override;
             bool matchesEvent(ButtonIndicator button, ButtonEvent event) override;
         private:
-            ButtonIndicator m_button;
-            ButtonEvent m_event;
     };
 
 }

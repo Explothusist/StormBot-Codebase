@@ -23,6 +23,7 @@ namespace frclib {
     class TimedRobot {
         public:
             TimedRobot();
+            TimedRobot(bool use_vex_competition);
             ~TimedRobot();
 
             // void robotInit(); // Use constructor instead
@@ -65,6 +66,8 @@ namespace frclib {
             bool m_had_state_chage;
 
             int m_frame_delay;
+
+            bool m_uses_vex_competition;
 
             // int m_command_id_counter;
 

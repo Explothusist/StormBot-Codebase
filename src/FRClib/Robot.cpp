@@ -19,6 +19,11 @@ namespace frclib {
     };
 
     TimedRobot::TimedRobot():
+        TimedRobot(false)
+    {
+
+    };
+    TimedRobot::TimedRobot(bool use_vex_competition):
         m_subsystems{ },
         m_commands{ },
         m_joysticks{ },
@@ -28,16 +33,11 @@ namespace frclib {
         m_old_state{ Disabled },
         m_reseting_state_loop{ false },
         m_had_state_chage{ false },
-        m_frame_delay{ 20 }
+        m_frame_delay{ 20 },
+        m_uses_vex_competition{ use_vex_competition }
         // m_command_id_counter{ 0 }
     {
-        // Create your VEX components here
-        // Actually no, the VEX components will be in the subsystems
 
-        // InstigateRobot(this);
-
-        // robotInternal(true); // FANCY LOOP 
-        // robotInternal(); // startLoop()
     };
     TimedRobot::~TimedRobot() {
         m_reseting_state_loop = true;
@@ -67,15 +67,18 @@ namespace frclib {
     };
 
     void TimedRobot::pollState() { // FANCY LOOP
-        if (m_competition.isEnabled()) {
-            if (m_competition.isAutonomous()) {
-                m_state = Autonomous;
-            }else if (m_competition.isDriverControl()) {
-                m_state = Teleop;
+        if (m_uses_vex_competition) { // Otherwise uses interrupts
+            if (m_competition.isEnabled()) {
+                if (m_competition.isAutonomous()) {
+                    m_state = Autonomous;
+                }else if (m_competition.isDriverControl()) {
+                    m_state = Teleop;
+                }
+            }else {
+                m_state = Disabled;
             }
-        }else {
-            m_state = Disabled;
         }
+
         if (m_state != m_old_state) {
             m_had_state_chage = true;
 
@@ -94,6 +97,8 @@ namespace frclib {
     };
 
     void TimedRobot::startLoop() {
+        
+
         robotInternal();
     };
 

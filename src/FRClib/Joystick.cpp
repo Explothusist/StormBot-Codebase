@@ -368,12 +368,18 @@ namespace frclib {
         m_command_terminations.clear();
         return commands;
     };
+    bool Joystick::pollAutonomousTriggers() {
+        bool triggered = m_autonomous_triggered;
+        m_autonomous_triggered = false;
+        return triggered;
+    };
 
     void Joystick::triggerEvent(StickIndicator stick, StickEvent event) {
         m_stick_state[stick] = event;
         for (int i = 0; i < static_cast<int>(m_temp_triggers.size()); i++) {
             if (m_temp_triggers[i]->matchesEvent(stick, event)) {
-                m_command_terminations.push_back(m_temp_triggers[i]->getCommandId());
+                interpretTrigger(m_temp_triggers[i], true);
+                
                 delete m_temp_triggers[i];
                 m_temp_triggers.erase(std::next(m_temp_triggers.begin(), i-1));
                 i -= 1;
@@ -382,14 +388,7 @@ namespace frclib {
 
         for (Trigger* trigger : m_triggers) {
             if (trigger->matchesEvent(stick, event)) {
-                Command* command = trigger->getCommand();
-                command->setId(global_command_id_counter);
-                global_command_id_counter += 1;
-                m_triggered_commands.push_back(command);
-                
-                if (trigger->getTriggerType() == WhileTrigger) {
-                    m_temp_triggers.push_back(new StickEndingTrigger(stick, event, command->getId()));
-                }
+                interpretTrigger(trigger, true);
             }
         }
     };
@@ -397,7 +396,8 @@ namespace frclib {
         m_button_state[button] = event;
         for (int i = 0; i < static_cast<int>(m_temp_triggers.size()); i++) {
             if (m_temp_triggers[i]->matchesEvent(button, event)) {
-                m_command_terminations.push_back(m_temp_triggers[i]->getCommandId());
+                interpretTrigger(m_temp_triggers[i], false);
+
                 delete m_temp_triggers[i];
                 m_temp_triggers.erase(std::next(m_temp_triggers.begin(), i-1));
                 i -= 1;
@@ -406,15 +406,41 @@ namespace frclib {
 
         for (Trigger* trigger : m_triggers) {
             if (trigger->matchesEvent(button, event)) {
-                Command* command = trigger->getCommand();
-                command->setId(global_command_id_counter);
-                global_command_id_counter += 1;
-                m_triggered_commands.push_back(command);
-                
-                if (trigger->getTriggerType() == WhileTrigger) {
-                    m_temp_triggers.push_back(new ButtonEndingTrigger(button, event, command->getId()));
-                }
+                interpretTrigger(trigger, false);
             }
+        }
+    };
+
+    void Joystick::interpretTrigger(Trigger* trigger, bool is_stick) {
+        switch (trigger->getTriggerEffect()) {
+            case StartCommand:
+                {
+                    Command* command{ trigger->getCommand() };
+                    command->setId(global_command_id_counter);
+                    global_command_id_counter += 1;
+                    m_triggered_commands.push_back(command);
+                    
+                    if (trigger->getTriggerType() == WhileTrigger) {
+                        if (is_stick) {
+                            m_temp_triggers.push_back(new StickEndingTrigger(EndCommand, static_cast<StickTrigger*>(trigger), command->getId()));
+                        }else {
+                            m_temp_triggers.push_back(new ButtonEndingTrigger(EndCommand, static_cast<ButtonTrigger*>(trigger), command->getId()));
+                        }
+                    }
+                }
+                break;
+            case EndCommand:
+                {
+                    m_command_terminations.push_back(trigger->getCommandId());
+                }
+                break;
+            case StartAutonomous:
+                {
+                    m_autonomous_triggered = true;
+                }
+                break;
+            default:
+                break;
         }
     };
 
@@ -422,13 +448,13 @@ namespace frclib {
         bindKey(stick, event, OnTrigger, command);
     };
     void Joystick::bindKey(StickIndicator stick, StickEvent event, TriggerType type, Command* command) {
-        m_triggers.push_back(new StickTrigger(stick, event, type, command));
+        m_triggers.push_back(new StickTrigger(StartCommand, stick, event, type, command));
     };
     void Joystick::bindKey(ButtonIndicator button, ButtonEvent event, Command* command) {
         bindKey(button, event, OnTrigger, command);
     };
     void Joystick::bindKey(ButtonIndicator button, ButtonEvent event, TriggerType type, Command* command) {
-        m_triggers.push_back(new ButtonTrigger(button, event, type, command));
+        m_triggers.push_back(new ButtonTrigger(StartCommand, button, event, type, command));
     };
 
     void Joystick::setAxis12(int axis1, int axis2) {
