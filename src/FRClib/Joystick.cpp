@@ -1,5 +1,9 @@
 
-#include "Joystick_Vex.h"
+#include "Joystick.h"
+
+#ifdef FRCLIB_VEX_
+#include "vex.h"
+#endif
 
 #include <cmath>
 
@@ -7,14 +11,15 @@ namespace frclib {
 
     int global_command_id_counter = 0;
 
+    const int joystick_threshold = 30;
+
+#ifdef FRCLIB_VEX_
     vex::controller m_controller_primary = vex::controller(vex::primary);
     vex::controller m_controller_partner = vex::controller(vex::partner);
     Joystick* current_joystick_primary{ nullptr };
     bool primary_init{ false };
     Joystick* current_joystick_partner{ nullptr };
     bool partner_init{ false };
-
-    const int joystick_threshold = 30;
 
     void buttonAPressed_Primary() {
         current_joystick_primary->triggerEvent(AButton, ButtonPressed);
@@ -328,9 +333,9 @@ namespace frclib {
             m_controller_partner.Axis4.changed(rightStickMoved_Partner);
         }
     };
+#endif
 
     Joystick::Joystick(JoystickType type):
-        m_controller{ vex::controller() },
         m_triggers{ },
         m_temp_triggers{ },
         m_triggered_commands{ },
@@ -345,11 +350,13 @@ namespace frclib {
         for (int i = 0; i < 12; i++) {
             m_button_state[i] = ButtonReleased;
         }
+#ifdef FRCLIB_VEX_
         if (type == PrimaryJoystick) {
             SetAsPrimaryJoystick(this);
         }else if (type == PartnerJoystick) {
             SetAsPartnerJoystick(this);
         }
+#endif
     };
     Joystick::~Joystick() {
         for (Trigger* trigger : m_triggers) {

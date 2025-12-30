@@ -2,7 +2,7 @@
 #ifndef STORMBOT_APPROACH_AND_ALIGN_
 #define STORMBOT_APPROACH_AND_ALIGN_
 
-#include "../FRClib/Command.h"
+#include "../FRCLib/Command.h"
 #include "../subsystems/Drivetrain.h"
 #include "../subsystems/CameraReader.h"
 

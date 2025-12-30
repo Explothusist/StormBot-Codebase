@@ -2,7 +2,7 @@
 #ifndef STORMBOT_DRIVETRAIN_
 #define STORMBOT_DRIVETRAIN_
 
-#include "../FRClib/Subsystem.h"
+#include "../FRCLib/Subsystem.h"
 #include "vex.h"
 
 class Drivetrain : public frclib::Subsystem {

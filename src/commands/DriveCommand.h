@@ -2,7 +2,7 @@
 #ifndef STORMBOT_DRIVECOMMAND_
 #define STORMBOT_DRIVECOMMAND_
 
-#include "../FRClib/frclib_vex.h"
+#include "../FRCLib/frclib.h"
 #include "../subsystems/Drivetrain.h"
 
 class DriveCommand : public frclib::Command {

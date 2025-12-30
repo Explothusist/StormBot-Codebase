@@ -4,9 +4,9 @@
 #include "Constants.h"
 
 StormBot::StormBot():
-    frclib::TimedRobot(false, constants::AutonomousLength)
+    frclib::TimedRobot(constants::AutonomousLength)
 {
-    
+    setUsesCompetition(false); // VEX-specific, must be set before startLoop()
 };
 
 void StormBot::robotPeriodic() {

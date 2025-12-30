@@ -4,9 +4,9 @@
 
 #include <vector>
 
-#include "vex.h"
+#include "frclib_platform.h"
 
-#include "../Trigger.h"
+#include "Trigger.h"
 
 namespace frclib {
 
@@ -46,8 +46,6 @@ namespace frclib {
             ButtonEvent getButtonState(ButtonIndicator button);
             int getRawAxis(AxisIndicator axis);
         private:
-            vex::controller m_controller;
-
             std::vector<Trigger*> m_triggers;
             std::vector<Trigger*> m_temp_triggers;
 

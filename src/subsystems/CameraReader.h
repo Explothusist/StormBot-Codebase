@@ -2,7 +2,7 @@
 #ifndef STORMBOT_CAMERA_
 #define STORMBOT_CAMERA_
 
-#include "../FRClib/Subsystem.h"
+#include "../FRCLib/Subsystem.h"
 #include "vex.h"
 
 class BoundingBox {

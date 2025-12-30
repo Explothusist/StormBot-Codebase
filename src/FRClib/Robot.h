@@ -4,13 +4,15 @@
 
 #include <vector>
 
+#include "frclib_platform.h"
+
+#ifdef FRCLIB_VEX_
 #include "vex.h"
+#endif
 
-// using namespace vex;
-
-#include "../Subsystem.h"
-#include "../Command.h"
-#include "Joystick_Vex.h"
+#include "Subsystem.h"
+#include "Command.h"
+#include "Joystick.h"
 
 namespace frclib {
 
@@ -23,8 +25,7 @@ namespace frclib {
     class TimedRobot {
         public:
             TimedRobot();
-            TimedRobot(bool use_vex_competition);
-            TimedRobot(bool use_vex_competition, int autonomous_length);
+            TimedRobot(int autonomous_length);
             ~TimedRobot();
 
             // void robotInit(); // Use constructor instead
@@ -43,7 +44,6 @@ namespace frclib {
             virtual void teleopPeriodic(); // User-made
             virtual void teleopExit(); // User-made
 
-            void handleState(RobotState state);
             void pollState();
 
             void runCommand(Command* command);
@@ -53,13 +53,21 @@ namespace frclib {
             void endCommand(int command_id); // Use the global Id assigned by Joystick
 
             void startLoop();
+
+#ifdef FRCLIB_VEX_
+            void setUsesCompetition(bool uses_competition); // VEX-specific
+#endif
+
         private:
             std::vector<Subsystem*> m_subsystems;
             std::vector<Command*> m_commands;
             std::vector<Joystick*> m_joysticks;
             Command* m_autonomous_command;
 
+#ifdef FRCLIB_VEX_
             vex::brain m_brain;
+            bool m_uses_vex_competition;
+#endif
 
             RobotState m_state;
             RobotState m_old_state;
@@ -68,14 +76,10 @@ namespace frclib {
 
             int m_frame_delay;
 
-            bool m_uses_vex_competition;
             bool m_first_auto_trigger;
             int m_autonomous_length;
             int m_start_of_auto;
 
-            // int m_command_id_counter;
-
-            // void robotInternal(bool is_original);
             void robotInternal();
             void disabledInternal();
             void autonomousInternal();
@@ -90,11 +94,6 @@ namespace frclib {
             bool robotHasJoystick(Joystick* joystick);
             bool subsystemHasCommand(Subsystem* subsystem);
     };
-
-    void InstigateRobot(TimedRobot* robot);
-
-    void translateAutonomous();
-    void translateTeleop();
 
 }
 

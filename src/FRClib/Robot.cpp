@@ -1,49 +1,34 @@
 
-#include "Robot_Vex.h"
+#include "Robot.h"
 
 namespace frclib {
 
+#ifdef FRCLIB_VEX_
     vex::competition m_competition;
-    TimedRobot* current_robot{ nullptr };
-
-    void InstigateRobot(TimedRobot* robot) {
-        current_robot = robot;
-        m_competition.autonomous(translateAutonomous);
-        m_competition.drivercontrol(translateTeleop);
-    };
-    void translateAutonomous() {
-        // FANCY LOOP current_robot->handleState(Autonomous);
-    };
-    void translateTeleop() {
-        // FANCY LOOP current_robot->handleState(Teleop);
-    };
+#endif
 
     TimedRobot::TimedRobot():
-        TimedRobot(false, 0)
+        TimedRobot(0)
     {
 
     };
-    TimedRobot::TimedRobot(bool use_vex_competition):
-        TimedRobot(use_vex_competition, 0)
-    {
-
-    };
-    TimedRobot::TimedRobot(bool use_vex_competition, int autonomous_length):
+    TimedRobot::TimedRobot(int autonomous_length):
         m_subsystems{ },
         m_commands{ },
         m_joysticks{ },
         m_autonomous_command{ new Command() },
+#ifdef FRCLIB_VEX_
         m_brain{ vex::brain() },
+        m_uses_vex_competition{ false },
+#endif
         m_state{ Disabled },
         m_old_state{ Disabled },
         m_reseting_state_loop{ false },
         m_had_state_chage{ false },
         m_frame_delay{ 20 },
-        m_uses_vex_competition{ use_vex_competition },
         m_first_auto_trigger{ true },
         m_autonomous_length{ autonomous_length },
         m_start_of_auto{ 0 }
-        // m_command_id_counter{ 0 }
     {
 
     };
@@ -62,19 +47,8 @@ namespace frclib {
         m_autonomous_command = nullptr;
     };
 
-    void TimedRobot::handleState(RobotState state) {
-        if (state == Autonomous) {
-            m_state = Autonomous;
-        }else if (state == Teleop) {
-            m_state = Teleop;
-        }
-        // FANCY LOOP m_reseting_state_loop = true; // Prevents all instances of robotInternal() except the one it is about to create
-        m_had_state_chage = true; // Runs the Init of the state it is entering
-        // FANCY LOOP vex::wait(m_frame_delay, vex::msec); // Ensures catching all other instances
-        // FANCY LOOP robotInternal(true);
-    };
-
     void TimedRobot::pollState() { // FANCY LOOP
+#ifdef FRCLIB_VEX_
         if (m_uses_vex_competition) { // Otherwise uses interrupts
             if (m_competition.isEnabled()) {
                 if (m_competition.isAutonomous()) {
@@ -86,6 +60,7 @@ namespace frclib {
                 m_state = Disabled;
             }
         }else {
+#endif
             if (m_first_auto_trigger) {
                 bool triggered = false;
                 for (Joystick* joystick : m_joysticks) {
@@ -96,16 +71,26 @@ namespace frclib {
                     m_state = Autonomous;
                     m_first_auto_trigger = false;
                     
+#ifdef FRCLIB_VEX_
                     m_start_of_auto = vex::timer::system();
+#endif
+#ifdef FRCLIB_ESP_32_ // WORKING HERE
+#endif
                 }
             }else if (m_state == Autonomous) {
+#ifdef FRCLIB_VEX_
                 int now = vex::timer::system();
 
                 if (now - m_start_of_auto > (m_autonomous_length*1000)) {
                     m_state = Teleop;
                 }
+#endif
+#ifdef FRCLIB_ESP_32_ // WORKING HERE
+#endif
             }
+#ifdef FRCLIB_VEX_
         }
+#endif
 
         if (m_state != m_old_state) {
             m_had_state_chage = true;
@@ -124,12 +109,21 @@ namespace frclib {
         }
     };
 
+#ifdef FRCLIB_VEX_
+    void TimedRobot::setUsesCompetition(bool uses_competition) {
+        m_uses_vex_competition = uses_competition;
+    };
+#endif
     void TimedRobot::startLoop() {
+#ifdef FRCLIB_VEX_
         if (!m_uses_vex_competition) {
+#endif
             for (Joystick* joystick : m_joysticks) {
                 joystick->bindAutoTrigger(AButton, ButtonPressed);
             }
+#ifdef FRCLIB_VEX_
         }
+#endif
 
         robotInternal();
     };
