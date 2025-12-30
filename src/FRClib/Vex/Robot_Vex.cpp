@@ -1,5 +1,5 @@
 
-#include "Robot.h"
+#include "Robot_Vex.h"
 
 namespace frclib {
 
@@ -101,7 +101,7 @@ namespace frclib {
             }else if (m_state == Autonomous) {
                 int now = vex::timer::system();
 
-                if (now-m_start_of_auto > (m_autonomous_length*1000)) {
+                if (now - m_start_of_auto > (m_autonomous_length*1000)) {
                     m_state = Teleop;
                 }
             }

@@ -9,7 +9,10 @@ include vex/mkenv.mk
 # location of the project source cpp and c files
 SRC_C  = $(wildcard src/*.cpp) 
 SRC_C += $(wildcard src/*.c)
-SRC_C += $(wildcard src/*/*.cpp) 
+SRC_C += $(wildcard src/commands/*.cpp)
+SRC_C += $(wildcard src/FRClib/*.cpp)
+SRC_C += $(wildcard src/FRClib/Vex/*.cpp)
+SRC_C += $(wildcard src/subsystems/*.cpp)
 SRC_C += $(wildcard src/*/*.c)
 
 OBJ = $(addprefix $(BUILD)/, $(addsuffix .o, $(basename $(SRC_C))) )

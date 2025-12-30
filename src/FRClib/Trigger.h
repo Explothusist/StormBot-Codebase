@@ -4,8 +4,6 @@
 
 #include <vector>
 
-#include "vex.h"
-
 #include "Command.h"
 
 namespace frclib {

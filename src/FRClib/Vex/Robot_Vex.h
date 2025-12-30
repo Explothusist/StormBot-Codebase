@@ -8,9 +8,9 @@
 
 // using namespace vex;
 
-#include "Subsystem.h"
-#include "Command.h"
-#include "Joystick.h"
+#include "../Subsystem.h"
+#include "../Command.h"
+#include "Joystick_Vex.h"
 
 namespace frclib {
 
@@ -71,7 +71,7 @@ namespace frclib {
             bool m_uses_vex_competition;
             bool m_first_auto_trigger;
             int m_autonomous_length;
-            bool m_start_of_auto;
+            int m_start_of_auto;
 
             // int m_command_id_counter;
 

@@ -1,5 +1,5 @@
 
-#include "Joystick.h"
+#include "Joystick_Vex.h"
 
 #include <cmath>
 

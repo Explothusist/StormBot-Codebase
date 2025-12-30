@@ -2,7 +2,7 @@
 #ifndef STORMBOT_
 #define STORMBOT_
 
-#include "FRClib/Robot.h"
+#include "FRClib/frclib_vex.h"
 
 class StormBot : public frclib::TimedRobot {
     public:

@@ -6,7 +6,7 @@
 
 #include "vex.h"
 
-#include "Trigger.h"
+#include "../Trigger.h"
 
 namespace frclib {
 
