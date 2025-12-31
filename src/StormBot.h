@@ -2,9 +2,9 @@
 #ifndef STORMBOT_
 #define STORMBOT_
 
-#include "FRCLib/frclib.h"
+#include "Automat/automat.h"
 
-class StormBot : public frclib::TimedRobot {
+class StormBot : public amt::TimedRobot {
     public:
         StormBot(); // No destructor because I don't want to override
 

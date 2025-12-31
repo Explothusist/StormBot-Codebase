@@ -1,12 +1,12 @@
 
-#ifndef FRCLIB_COMMAND_
-#define FRCLIB_COMMAND_
+#ifndef AUTOMAT_COMMAND_
+#define AUTOMAT_COMMAND_
 
 #include <vector>
 
 // #include "Subsystem.h"
 
-namespace frclib {
+namespace amt {
 
     class Subsystem;
 
@@ -29,7 +29,7 @@ namespace frclib {
 
             void usesSubsystem(Subsystem* subsystem); // Call repeatedly for each subsystem used
 
-            void setId(int id); // For use by frclib::Robot
+            void setId(int id); // For use by amt::Robot
             int getId();
         private:
             bool m_is_first_run;

@@ -1,10 +1,10 @@
 
-#ifndef FRCLIB_SUBSYSTEM_
-#define FRCLIB_SUBSYSTEM_
+#ifndef AUTOMAT_SUBSYSTEM_
+#define AUTOMAT_SUBSYSTEM_
 
 #include "Command.h"
 
-namespace frclib {
+namespace amt {
 
     // class Command;
 

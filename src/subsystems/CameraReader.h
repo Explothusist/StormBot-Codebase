@@ -2,7 +2,7 @@
 #ifndef STORMBOT_CAMERA_
 #define STORMBOT_CAMERA_
 
-#include "../FRCLib/Subsystem.h"
+#include "../Automat/Subsystem.h"
 #include "vex.h"
 
 class BoundingBox {
@@ -18,7 +18,7 @@ class BoundingBox {
         int m_height;
 };
 
-class CameraReader : public frclib::Subsystem {
+class CameraReader : public amt::Subsystem {
     public:
         CameraReader(); // No destructor because I don't want to override
         ~CameraReader() override;

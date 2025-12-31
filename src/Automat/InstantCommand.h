@@ -1,12 +1,12 @@
 
-#ifndef FRCLIB_INSTANT_COMMAND_
-#define FRCLIB_INSTANT_COMMAND_
+#ifndef AUTOMAT_INSTANT_COMMAND_
+#define AUTOMAT_INSTANT_COMMAND_
 
 #include <functional>
 
 #include "Command.h"
 
-namespace frclib {
+namespace amt {
 
     class InstantCommand : public Command { // Subsystems? ...
         public:

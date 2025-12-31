@@ -1,14 +1,14 @@
 
-#ifndef FRCLIB_JOYSTICK_
-#define FRCLIB_JOYSTICK_
+#ifndef AUTOMAT_JOYSTICK_
+#define AUTOMAT_JOYSTICK_
 
 #include <vector>
 
-#include "frclib_platform.h"
+#include "automat_platform.h"
 
 #include "Trigger.h"
 
-namespace frclib {
+namespace amt {
 
     class Command;
 

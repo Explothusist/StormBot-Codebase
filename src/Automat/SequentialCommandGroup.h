@@ -1,12 +1,12 @@
 
-#ifndef FRCLIB_INSTANT_COMMAND_
-#define FRCLIB_INSTANT_COMMAND_
+#ifndef AUTOMAT_INSTANT_COMMAND_
+#define AUTOMAT_INSTANT_COMMAND_
 
 #include <vector>
 
 #include "Command.h"
 
-namespace frclib {
+namespace amt {
 
     class SequentialCommandGroup : public Command {
         public:

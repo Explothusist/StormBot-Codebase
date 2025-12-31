@@ -2,11 +2,11 @@
 #ifndef STORMBOT_APPROACH_AND_ALIGN_
 #define STORMBOT_APPROACH_AND_ALIGN_
 
-#include "../FRCLib/Command.h"
+#include "../Automat/Command.h"
 #include "../subsystems/Drivetrain.h"
 #include "../subsystems/CameraReader.h"
 
-class ApproachAndAlign : public frclib::Command {
+class ApproachAndAlign : public amt::Command {
     public:
         ApproachAndAlign(Drivetrain* drivetrain, CameraReader* cameras); // Put subsystems as parameters
         ApproachAndAlign(ApproachAndAlign& command); // Copy constructor

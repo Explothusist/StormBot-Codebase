@@ -8,7 +8,7 @@
 /*----------------------------------------------------------------------------*/
 #include "vex.h"
 
-#include "FRCLib/frclib.h"
+#include "Automat/automat.h"
 #include "StormBot.h"
 
 #include "subsystems/Drivetrain.h"
@@ -21,8 +21,8 @@ StormBot* m_robot{ new StormBot() };
 Drivetrain* m_drivetrain{ new Drivetrain() };
 CameraReader* m_camera_reader{ new CameraReader() };
 
-frclib::Joystick* m_driver_controller{ new frclib::Joystick(frclib::PrimaryJoystick) };
-frclib::Joystick* m_operator_controller{ new frclib::Joystick(frclib::PartnerJoystick) };
+amt::Joystick* m_driver_controller{ new amt::Joystick(amt::PrimaryJoystick) };
+amt::Joystick* m_operator_controller{ new amt::Joystick(amt::PartnerJoystick) };
 
 
 int main() {

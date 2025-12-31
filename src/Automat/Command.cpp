@@ -1,7 +1,7 @@
 
 #include "Command.h"
 
-namespace frclib {
+namespace amt {
 
     Command::Command(): // Put Subsystems as parameters
         m_is_first_run{ true }, // Will be overriden, marks when to run initialize

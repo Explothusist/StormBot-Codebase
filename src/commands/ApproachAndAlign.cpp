@@ -6,7 +6,7 @@
 #include "../Constants.h"
 
 ApproachAndAlign::ApproachAndAlign(Drivetrain* drivetrain, CameraReader* cameras):
-    Command(),
+    amt::Command(),
     m_drivetrain{ drivetrain },
     m_cameras{ cameras },
     m_check_dist_counter{ 0 },
@@ -16,7 +16,7 @@ ApproachAndAlign::ApproachAndAlign(Drivetrain* drivetrain, CameraReader* cameras
     usesSubsystem(m_drivetrain);
 };
 ApproachAndAlign::ApproachAndAlign(ApproachAndAlign& command):
-    Command(command)
+    amt::Command(command)
 {
     m_drivetrain = command.m_drivetrain;
     m_cameras = command.m_cameras;

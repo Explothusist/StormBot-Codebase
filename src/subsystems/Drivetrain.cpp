@@ -1,10 +1,11 @@
 
 #include "Drivetrain.h"
 
+#include "cmath"
 #include "../Constants.h"
 
 Drivetrain::Drivetrain():
-    frclib::Subsystem(),
+    amt::Subsystem(),
     m_motor_bl{ vex::motor(constants::MotorBL_Port, vex::gearSetting::ratio18_1, false) },
     m_motor_br{ vex::motor(constants::MotorBR_Port, vex::gearSetting::ratio18_1, false) },
     m_motor_fl{ vex::motor(constants::MotorFL_Port, vex::gearSetting::ratio18_1, false) },

@@ -1,15 +1,15 @@
 
 #include "DriveCommand.h"
 
-DriveCommand::DriveCommand(Drivetrain* drivetrain, frclib::Joystick* driver_controller):
-    Command(),
+DriveCommand::DriveCommand(Drivetrain* drivetrain, amt::Joystick* driver_controller):
+    amt::Command(),
     m_drivetrain{ drivetrain },
     m_driver_controller{ driver_controller }
 {
     usesSubsystem(m_drivetrain);
 };
 DriveCommand::DriveCommand(DriveCommand& command):
-    Command(command)
+    amt::Command(command)
 {
     m_drivetrain = command.m_drivetrain;
     m_driver_controller = command.m_driver_controller;
@@ -22,15 +22,15 @@ void DriveCommand::initialize() {
 
 };
 void DriveCommand::execute() {
-    int rotation = m_driver_controller->getRawAxis(frclib::Axis4);
+    int rotation = m_driver_controller->getRawAxis(amt::Axis4);
 
-    if (m_driver_controller->getButtonState(frclib::L2Button) != frclib::ButtonPressed) {
+    if (m_driver_controller->getButtonState(amt::L2Button) != amt::ButtonPressed) {
         rotation = 0; // Lock rotation unless holding Z-target
     }
 
     m_drivetrain->setDrive(
-        m_driver_controller->getRawAxis(frclib::Axis1),
-        m_driver_controller->getRawAxis(frclib::Axis2),
+        m_driver_controller->getRawAxis(amt::Axis1),
+        m_driver_controller->getRawAxis(amt::Axis2),
         rotation
     );
 };

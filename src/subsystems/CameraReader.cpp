@@ -32,7 +32,7 @@ double BoundingBox::getApproxDistance(int actual_width, int actual_height) {
 };
 
 CameraReader::CameraReader():
-    frclib::Subsystem(),
+    amt::Subsystem(),
     m_color_red{ vex::aivision::colordesc(1, 255, 0, 0, 20, 0.2) },
     m_color_blue{ vex::aivision::colordesc(1, 0, 0, 255, 20, 0.2) },
     m_camera_front{ vex::aivision(constants::CameraFront_Port, m_color_red, m_color_blue) }//,

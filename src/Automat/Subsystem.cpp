@@ -1,7 +1,7 @@
 
 #include "Subsystem.h"
 
-namespace frclib {
+namespace amt {
 
     Subsystem::Subsystem(): 
         m_default_command{ nullptr }

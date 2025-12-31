@@ -1,19 +1,19 @@
 
 #include "Joystick.h"
 
-#ifdef FRCLIB_VEX_
+#ifdef AUTOMAT_VEX_
 #include "vex.h"
 #endif
 
 #include <cmath>
 
-namespace frclib {
+namespace amt {
 
     int global_command_id_counter = 0;
 
     const int joystick_threshold = 30;
 
-#ifdef FRCLIB_VEX_
+#ifdef AUTOMAT_VEX_
     vex::controller m_controller_primary = vex::controller(vex::primary);
     vex::controller m_controller_partner = vex::controller(vex::partner);
     Joystick* current_joystick_primary{ nullptr };
@@ -350,7 +350,7 @@ namespace frclib {
         for (int i = 0; i < 12; i++) {
             m_button_state[i] = ButtonReleased;
         }
-#ifdef FRCLIB_VEX_
+#ifdef AUTOMAT_VEX_
         if (type == PrimaryJoystick) {
             SetAsPrimaryJoystick(this);
         }else if (type == PartnerJoystick) {

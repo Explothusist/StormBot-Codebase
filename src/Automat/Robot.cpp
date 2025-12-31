@@ -1,9 +1,9 @@
 
 #include "Robot.h"
 
-namespace frclib {
+namespace amt {
 
-#ifdef FRCLIB_VEX_
+#ifdef AUTOMAT_VEX_
     vex::competition m_competition;
 #endif
 
@@ -17,7 +17,7 @@ namespace frclib {
         m_commands{ },
         m_joysticks{ },
         m_autonomous_command{ new Command() },
-#ifdef FRCLIB_VEX_
+#ifdef AUTOMAT_VEX_
         m_brain{ vex::brain() },
         m_uses_vex_competition{ false },
 #endif
@@ -48,7 +48,7 @@ namespace frclib {
     };
 
     void TimedRobot::pollState() { // FANCY LOOP
-#ifdef FRCLIB_VEX_
+#ifdef AUTOMAT_VEX_
         if (m_uses_vex_competition) { // Otherwise uses interrupts
             if (m_competition.isEnabled()) {
                 if (m_competition.isAutonomous()) {
@@ -71,24 +71,24 @@ namespace frclib {
                     m_state = Autonomous;
                     m_first_auto_trigger = false;
                     
-#ifdef FRCLIB_VEX_
+#ifdef AUTOMAT_VEX_
                     m_start_of_auto = vex::timer::system();
 #endif
-#ifdef FRCLIB_ESP_32_ // WORKING HERE
+#ifdef AUTOMAT_ESP_32_ // WORKING HERE
 #endif
                 }
             }else if (m_state == Autonomous) {
-#ifdef FRCLIB_VEX_
+#ifdef AUTOMAT_VEX_
                 int now = vex::timer::system();
 
                 if (now - m_start_of_auto > (m_autonomous_length*1000)) {
                     m_state = Teleop;
                 }
 #endif
-#ifdef FRCLIB_ESP_32_ // WORKING HERE
+#ifdef AUTOMAT_ESP_32_ // WORKING HERE
 #endif
             }
-#ifdef FRCLIB_VEX_
+#ifdef AUTOMAT_VEX_
         }
 #endif
 
@@ -109,19 +109,19 @@ namespace frclib {
         }
     };
 
-#ifdef FRCLIB_VEX_
+#ifdef AUTOMAT_VEX_
     void TimedRobot::setUsesCompetition(bool uses_competition) {
         m_uses_vex_competition = uses_competition;
     };
 #endif
     void TimedRobot::startLoop() {
-#ifdef FRCLIB_VEX_
+#ifdef AUTOMAT_VEX_
         if (!m_uses_vex_competition) {
 #endif
             for (Joystick* joystick : m_joysticks) {
                 joystick->bindAutoTrigger(AButton, ButtonPressed);
             }
-#ifdef FRCLIB_VEX_
+#ifdef AUTOMAT_VEX_
         }
 #endif
 

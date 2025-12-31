@@ -1,7 +1,7 @@
 
 #include "InstantCommand.h"
 
-namespace frclib {
+namespace amt {
 
     InstantCommand::InstantCommand(std::function<void()> lambda):
         Command(),

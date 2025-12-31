@@ -1,7 +1,7 @@
 
 #include "Trigger.h"
 
-namespace frclib {
+namespace amt {
 
     Trigger::Trigger(TriggerEffect effect):
         m_effect{ effect },

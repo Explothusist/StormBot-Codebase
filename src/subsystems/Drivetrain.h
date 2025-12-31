@@ -2,10 +2,10 @@
 #ifndef STORMBOT_DRIVETRAIN_
 #define STORMBOT_DRIVETRAIN_
 
-#include "../FRCLib/Subsystem.h"
+#include "../Automat/Subsystem.h"
 #include "vex.h"
 
-class Drivetrain : public frclib::Subsystem {
+class Drivetrain : public amt::Subsystem {
     public:
         Drivetrain(); // No destructor because I don't want to override
         ~Drivetrain() override;

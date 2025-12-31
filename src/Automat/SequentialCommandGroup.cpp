@@ -1,7 +1,7 @@
 
 #include "SequentialCommandGroup.h"
 
-namespace frclib {
+namespace amt {
 
     SequentialCommandGroup::SequentialCommandGroup(std::vector<Command*> commands):
         Command(),

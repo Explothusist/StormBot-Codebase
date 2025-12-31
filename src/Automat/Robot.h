@@ -1,12 +1,12 @@
 
-#ifndef FRCLIB_ROBOT_
-#define FRCLIB_ROBOT_
+#ifndef AUTOMAT_ROBOT_
+#define AUTOMAT_ROBOT_
 
 #include <vector>
 
-#include "frclib_platform.h"
+#include "automat_platform.h"
 
-#ifdef FRCLIB_VEX_
+#ifdef AUTOMAT_VEX_
 #include "vex.h"
 #endif
 
@@ -14,7 +14,7 @@
 #include "Command.h"
 #include "Joystick.h"
 
-namespace frclib {
+namespace amt {
 
     typedef enum {
         Disabled,
@@ -54,7 +54,7 @@ namespace frclib {
 
             void startLoop();
 
-#ifdef FRCLIB_VEX_
+#ifdef AUTOMAT_VEX_
             void setUsesCompetition(bool uses_competition); // VEX-specific
 #endif
 
@@ -64,7 +64,7 @@ namespace frclib {
             std::vector<Joystick*> m_joysticks;
             Command* m_autonomous_command;
 
-#ifdef FRCLIB_VEX_
+#ifdef AUTOMAT_VEX_
             vex::brain m_brain;
             bool m_uses_vex_competition;
 #endif

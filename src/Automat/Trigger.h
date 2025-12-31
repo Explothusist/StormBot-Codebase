@@ -1,12 +1,12 @@
 
-#ifndef FRCLIB_TRIGGER_
-#define FRCLIB_TRIGGER_
+#ifndef AUTOMAT_TRIGGER_
+#define AUTOMAT_TRIGGER_
 
 #include <vector>
 
 #include "Command.h"
 
-namespace frclib {
+namespace amt {
 
     // class Command; // Forward declare because it never actually uses it
 
