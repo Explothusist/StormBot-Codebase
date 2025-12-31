@@ -1,15 +1,15 @@
 
 #include "DriveCommand.h"
 
-DriveCommand::DriveCommand(Drivetrain* drivetrain, amt::Joystick* driver_controller):
-    amt::Command(),
+DriveCommand::DriveCommand(Drivetrain* drivetrain, atmt::Joystick* driver_controller):
+    atmt::Command(),
     m_drivetrain{ drivetrain },
     m_driver_controller{ driver_controller }
 {
     usesSubsystem(m_drivetrain);
 };
 DriveCommand::DriveCommand(DriveCommand& command):
-    amt::Command(command)
+    atmt::Command(command)
 {
     m_drivetrain = command.m_drivetrain;
     m_driver_controller = command.m_driver_controller;
@@ -22,15 +22,15 @@ void DriveCommand::initialize() {
 
 };
 void DriveCommand::execute() {
-    int rotation = m_driver_controller->getRawAxis(amt::Axis4);
+    int rotation = m_driver_controller->getRawAxis(atmt::Axis4);
 
-    if (m_driver_controller->getButtonState(amt::L2Button) != amt::ButtonPressed) {
+    if (m_driver_controller->getButtonState(atmt::L2Button) != atmt::ButtonPressed) {
         rotation = 0; // Lock rotation unless holding Z-target
     }
 
     m_drivetrain->setDrive(
-        m_driver_controller->getRawAxis(amt::Axis1),
-        m_driver_controller->getRawAxis(amt::Axis2),
+        m_driver_controller->getRawAxis(atmt::Axis1),
+        m_driver_controller->getRawAxis(atmt::Axis2),
         rotation
     );
 };

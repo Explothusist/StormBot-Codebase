@@ -10,7 +10,7 @@ STORM competition website: https://storm.soonerrobotics.org/about
 
 Under src/Automat, the repository Explothusist/Automat is included as a submodule.
 
-Automat is a partial imitation of the FRC (FIRST Robotics Competition) robot control library WPILib, an open source library built and maintained by the Worchester Polytechnic Institute. WPILib's most outstanding benefit is its simple and efficient command-based robot framework dividing the robot into commands and subsystems. This imitation library provides most of the basic functionality of WPILib to VEX and Esp32 architectures.
+Automat is a partial imitation of the FRC (FIRST Robotics Competition) robot control library WPILib, an open source library built and maintained by the Worchester Polytechnic Institute. WPILib's most outstanding benefit is its simple and efficient command-based robot framework dividing the robot into commands and subsystems. Automat provides most of the basic functionality of WPILib to VEX and Esp32 architectures.
 
 Automat Library: https://github.com/Explothusist/Automat
 

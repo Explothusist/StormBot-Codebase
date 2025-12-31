@@ -5,7 +5,7 @@
 #include "../Automat/Subsystem.h"
 #include "vex.h"
 
-class Drivetrain : public amt::Subsystem {
+class Drivetrain : public atmt::Subsystem {
     public:
         Drivetrain(); // No destructor because I don't want to override
         ~Drivetrain() override;

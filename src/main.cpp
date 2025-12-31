@@ -21,8 +21,8 @@ StormBot* m_robot{ new StormBot() };
 Drivetrain* m_drivetrain{ new Drivetrain() };
 CameraReader* m_camera_reader{ new CameraReader() };
 
-amt::Joystick* m_driver_controller{ new amt::Joystick(amt::PrimaryJoystick) };
-amt::Joystick* m_operator_controller{ new amt::Joystick(amt::PartnerJoystick) };
+atmt::Joystick* m_driver_controller{ new atmt::Joystick(atmt::PrimaryJoystick) };
+atmt::Joystick* m_operator_controller{ new atmt::Joystick(atmt::PartnerJoystick) };
 
 
 int main() {

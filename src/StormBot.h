@@ -4,7 +4,7 @@
 
 #include "Automat/automat.h"
 
-class StormBot : public amt::TimedRobot {
+class StormBot : public atmt::TimedRobot {
     public:
         StormBot(); // No destructor because I don't want to override
 

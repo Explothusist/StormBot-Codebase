@@ -6,7 +6,7 @@
 #include "../subsystems/Drivetrain.h"
 #include "../subsystems/CameraReader.h"
 
-class ApproachAndAlign : public amt::Command {
+class ApproachAndAlign : public atmt::Command {
     public:
         ApproachAndAlign(Drivetrain* drivetrain, CameraReader* cameras); // Put subsystems as parameters
         ApproachAndAlign(ApproachAndAlign& command); // Copy constructor

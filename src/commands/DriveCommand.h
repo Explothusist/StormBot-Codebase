@@ -5,9 +5,9 @@
 #include "../Automat/automat.h"
 #include "../subsystems/Drivetrain.h"
 
-class DriveCommand : public amt::Command {
+class DriveCommand : public atmt::Command {
     public:
-        DriveCommand(Drivetrain* drivetrain, amt::Joystick* driver_controller); // Put subsystems as parameters
+        DriveCommand(Drivetrain* drivetrain, atmt::Joystick* driver_controller); // Put subsystems as parameters
         DriveCommand(DriveCommand& command); // Copy constructor
         ~DriveCommand();
 
@@ -18,7 +18,7 @@ class DriveCommand : public amt::Command {
         
     private:
         Drivetrain* m_drivetrain;
-        amt::Joystick* m_driver_controller;
+        atmt::Joystick* m_driver_controller;
 };
 
 #endif

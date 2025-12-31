@@ -18,7 +18,7 @@ class BoundingBox {
         int m_height;
 };
 
-class CameraReader : public amt::Subsystem {
+class CameraReader : public atmt::Subsystem {
     public:
         CameraReader(); // No destructor because I don't want to override
         ~CameraReader() override;
