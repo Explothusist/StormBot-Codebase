@@ -3,10 +3,12 @@
 #define STORMBOT_
 
 #include "Automat/automat.h"
+#include "RobotContainer.h"
 
 class StormBot : public atmt::TimedRobot {
     public:
-        StormBot(); // No destructor because I don't want to override
+        StormBot();
+        ~StormBot();
 
         void robotPeriodic() override;
         
@@ -23,6 +25,7 @@ class StormBot : public atmt::TimedRobot {
         void teleopExit() override;
 
     private:
+        RobotContainer* m_bot_cont;
 };
 
 #endif
