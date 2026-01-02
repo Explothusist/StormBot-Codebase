@@ -7,7 +7,7 @@
 
 class DriveCommand : public atmt::Command {
     public:
-        DriveCommand(Drivetrain* drivetrain, atmt::Joystick* driver_controller); // Put subsystems as parameters
+        DriveCommand(Drivetrain* drivetrain, double x_power, double y_power, double r_power); // Put subsystems as parameters
         DriveCommand(DriveCommand& command); // Copy constructor
         ~DriveCommand();
 
@@ -18,7 +18,9 @@ class DriveCommand : public atmt::Command {
         
     private:
         Drivetrain* m_drivetrain;
-        atmt::Joystick* m_driver_controller;
+        double m_x_power;
+        double m_y_power;
+        double m_r_power;
 };
 
 #endif

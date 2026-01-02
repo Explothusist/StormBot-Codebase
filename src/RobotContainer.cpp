@@ -1,7 +1,10 @@
 
 #include "RobotContainer.h"
 
+#include <vector>
+
 #include "commands/DriveCommand.h"
+#include "commands/TeleopDriveCommand.h"
 #include "commands/ApproachAndAlign.h"
 
 RobotContainer::RobotContainer():
@@ -27,5 +30,13 @@ void RobotContainer::configure_bindings() {
 
     m_driver_controller->bindKey(atmt::R2Button, atmt::ButtonPressed, atmt::WhileTrigger, new ApproachAndAlign(m_drivetrain, m_camera_reader));
     
-    m_drivetrain->setDefaultCommand(new DriveCommand(m_drivetrain, m_driver_controller));
+    m_drivetrain->setDefaultCommand(new TeleopDriveCommand(m_drivetrain, m_driver_controller));
+};
+
+atmt::Command* RobotContainer::getAutonomousCommand() {
+    // std::vector<atmt::Command*> commands = 
+    return new atmt::SequentialCommandGroup({
+        (new DriveCommand(m_drivetrain, 0.3, 0.0, 0.0))->withTimeout(2.0),
+        new ApproachAndAlign(m_drivetrain, m_camera_reader)
+    });
 };

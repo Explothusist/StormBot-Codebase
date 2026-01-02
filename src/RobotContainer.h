@@ -15,6 +15,8 @@ class RobotContainer {
 
         void configure_bindings();
 
+        atmt::Command* getAutonomousCommand();
+
         Drivetrain* m_drivetrain; // public because they are for Robot.cpp
         CameraReader* m_camera_reader;
 
