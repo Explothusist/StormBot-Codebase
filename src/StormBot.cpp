@@ -26,35 +26,35 @@ StormBot::~StormBot() {
 };
 
 void StormBot::robotPeriodic() {
-
+    atmt::platform_print("Robot Periodic...");
 };
 
 void StormBot::disabledInit() {
-
+    atmt::platform_print("Disabled Init!");
 };
 void StormBot::disabledPeriodic() {
-
+    atmt::platform_print("Disabled Periodic...");
 };
 void StormBot::disabledExit() {
-
+    atmt::platform_print("Disabled Exit");
 };
 
 void StormBot::autonomousInit() {
-
+    atmt::platform_print("Autonomous Init!");
 };
 void StormBot::autonomousPeriodic() {
-
+    atmt::platform_print("Autonomous Periodic...");
 };
 void StormBot::autonomousExit() {
-
+    atmt::platform_print("Autonomous Exit");
 };
 
 void StormBot::teleopInit() {
-
+    atmt::platform_print("Teleop Init!");
 };
 void StormBot::teleopPeriodic() {
-
+    atmt::platform_print("Teleop Periodic...");
 };
 void StormBot::teleopExit() {
-
+    atmt::platform_print("Teleop Exit");
 };

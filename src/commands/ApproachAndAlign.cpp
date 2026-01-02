@@ -1,7 +1,7 @@
 
 #include "ApproachAndAlign.h"
 
-#include "cmath"
+#include <cmath>
 
 #include "../Constants.h"
 
@@ -48,7 +48,7 @@ void ApproachAndAlign::execute() {
         m_last_offset = object->m_center_x;
 
         int min_speed = object->m_center_x >= 0 ? constants::Min_Speed_To_Move : -constants::Min_Speed_To_Move;
-        double obj_percent_pos = object->m_center_x / constants::Camera_Viewport_Width;
+        double obj_percent_pos = static_cast<double>(object->m_center_x) / static_cast<double>(constants::Camera_Viewport_Width);
         int bonus_speed = constants::Align_Max_Speed_LR - constants::Min_Speed_To_Move;
 
         double drive_lr = min_speed + (obj_percent_pos * bonus_speed); // in percentage
@@ -60,10 +60,11 @@ void ApproachAndAlign::execute() {
         double drive_fb = min_speed + (obj_percent_pos * bonus_speed); // in percentage
 
         m_drivetrain->setDrive(
-            drive_lr * 100, // In joystick -100 to 100
-            drive_fb * 100,
+            static_cast<int>(std::round(drive_lr * 100.0)), // In joystick -100 to 100
+            static_cast<int>(std::round(drive_fb * 100.0)),
             0
         );
+        delete object; // free BoundingBox returned by CameraReader
     }else {
         m_invisibility_count += 1;
         m_drivetrain->stopDrive();

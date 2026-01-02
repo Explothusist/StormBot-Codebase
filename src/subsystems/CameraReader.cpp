@@ -1,6 +1,11 @@
 
 #include "CameraReader.h"
 
+#include <cmath>
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
 #include "../Constants.h"
 
 BoundingBox::BoundingBox(int center_x, int center_y, int width, int height):
@@ -16,19 +21,19 @@ BoundingBox::~BoundingBox() {
 };
 
 double BoundingBox::getApproxDistance(int actual_width, int actual_height) {
-    double width_ratio = m_width / constants::Camera_Viewport_Width; // Pixels/Pixels = Percentage
-    double height_ratio = m_height / constants::Camera_Viewport_Height; // Percent of Viewport
+    double width_ratio = static_cast<double>(m_width) / static_cast<double>(constants::Camera_Viewport_Width); // Pixels/Pixels = Percentage
+    double height_ratio = static_cast<double>(m_height) / static_cast<double>(constants::Camera_Viewport_Height); // Percent of Viewport
 
     width_ratio *= constants::Camera_FOV_Horizontal / 360; // Percentage * Percentage = Percentage
     height_ratio *= constants::Camera_FOV_Vertical / 360; // Percent of Circle
 
-    width_ratio *= M_2_PI; // Percentage * Radians = Radians
-    height_ratio *= M_2_PI; // Radians!
+    width_ratio *= M_PI * 2; // Percentage * Radians = Radians
+    height_ratio *= M_PI * 2; // Radians!
 
-    double distance_w = actual_width / width_ratio; // Inches / Radians = Inches
-    double distance_h = actual_height / height_ratio; // Inches of Distance
+    double distance_w = static_cast<double>(actual_width) / width_ratio; // Inches / Radians = Inches
+    double distance_h = static_cast<double>(actual_height) / height_ratio; // Inches of Distance
 
-    return (distance_w + distance_h) / 2; // Average of two metrics
+    return (distance_w + distance_h) / 2.0; // Average of two metrics
 };
 
 CameraReader::CameraReader():

@@ -2,7 +2,7 @@
 #ifndef STORMBOT_DRIVETRAIN_
 #define STORMBOT_DRIVETRAIN_
 
-#include "../Automat/Subsystem.h"
+#include "../Automat/automat.h"
 #include "vex.h"
 
 class Drivetrain : public atmt::Subsystem {
@@ -21,6 +21,8 @@ class Drivetrain : public atmt::Subsystem {
         vex::motor m_motor_br;
         vex::motor m_motor_fl;
         vex::motor m_motor_fr;
+
+        vex::inertial m_gyro;
 };
 
 #endif

@@ -15,6 +15,8 @@ namespace constants {
     int const MotorFL_Port = vex::PORT3;
     int const MotorFR_Port = vex::PORT4;
 
+    int const Gyro_Port = vex::PORT5;
+
     double const Drivetrain_Speed = 0.30; // Percent
 
     // Drivetrain Align
@@ -30,9 +32,9 @@ namespace constants {
     double const Align_Epsilon_FB = 2.0; // In inches
 
     // Camera
-    int const CameraFront_Port = vex::PORT1;
-    int const CameraLeft_Port = vex::PORT2;
-    int const CameraRight_Port = vex::PORT3;
+    int const CameraFront_Port = vex::PORT6;
+    // int const CameraLeft_Port = vex::PORT2;
+    // int const CameraRight_Port = vex::PORT3;
 
     int const Camera_Viewport_Width = 320; // In camera pixels
     int const Camera_Viewport_Height = 240; // In camera pixels
