@@ -1,6 +1,8 @@
 
 #include "StormBot.h"
 
+#include "Automat/automat.h"
+
 #include "Constants.h"
 
 StormBot::StormBot():

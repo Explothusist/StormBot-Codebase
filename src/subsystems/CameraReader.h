@@ -25,12 +25,16 @@ class CameraReader : public atmt::Subsystem {
 
         void periodic() override;
 
+        vex::aivision::object* getLargestOfColors(vex::aivision camera, vex::aivision::colordesc color1, vex::aivision::colordesc color2);
+
         BoundingBox* getLargestTagFront();
-        BoundingBox* getLargestColorFront();
+        BoundingBox* getLargestScoringFront();
+        BoundingBox* getLargestBatteryFront();
 
     private:
         vex::aivision::colordesc m_color_red;
         vex::aivision::colordesc m_color_blue;
+        vex::aivision::colordesc m_color_white;
 
         vex::aivision m_camera_front;
         // vex::aivision m_camera_left;

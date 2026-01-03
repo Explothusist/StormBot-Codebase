@@ -23,13 +23,21 @@ namespace constants {
     double const Min_Speed_To_Move = 0.12; // Determine experimentally
 
     double const Align_Max_Speed_LR = 0.30; // Gradient, Left/Right
-    double const Align_Min_Speed_FB = Min_Speed_To_Move + 0.4;
+    double const Align_Min_Speed_FB = Min_Speed_To_Move + 0.04;
     double const Align_Max_Speed_FB = 0.30; // Gradient, Forward/Backward
 
-    double const Align_Slow_At_Distance = 12; // in inches
+    double const Align_Slow_At_Distance = 12.0; // in inches
 
     double const Align_Epsilon_LR = 20.0; // In camera pixels
     double const Align_Epsilon_FB = 2.0; // In inches
+
+    double const Pounce_Max_Speed_LR = 0.30;
+    double const Pounce_Min_Speed_FB = Min_Speed_To_Move;
+    double const Pounce_Max_Speed_FB = 0.20;
+
+    double const Pounce_Slow_At_Distance = 12.0;
+    double const Pounce_Epsilon_LR = 20.0;
+    double const Pounce_Epsilon_FB = 2.0;
 
     // Camera
     int const CameraFront_Port = vex::PORT6;
@@ -52,7 +60,11 @@ namespace constants {
     double const ColorRect_Actual_Width = 8.0; // In inches
     double const ColorRect_Actual_Height = 2.0; // In inches
 
+    double const Battery_Actual_Width = 1.66; // In inches
+    double const Battery_Actual_Height = 6.0; // In inches
+
     double const ColorRect_Insignificant = 20; // In camera pixels
+    double const Battery_Insignificant = 20; // In camera pixels
 
 };
 
