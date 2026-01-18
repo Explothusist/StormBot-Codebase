@@ -41,12 +41,14 @@ CameraReader::CameraReader():
     m_color_red{ vex::aivision::colordesc(1, 255, 0, 0, 20, 0.2) },
     m_color_blue{ vex::aivision::colordesc(1, 0, 0, 255, 20, 0.2) },
     m_color_white{ vex::aivision::colordesc(1, 255, 255, 255, 180, 0.2) },
-    m_camera_front{ vex::aivision(constants::CameraFront_Port, m_color_red, m_color_blue, m_color_white) }//,
+    m_camera_front{ nullptr }//,
+    // m_camera_front{ vex::aivision(constants::CameraFront_Port, m_color_red, m_color_blue, m_color_white) }//,
+
     // m_camera_left{ vex::aivision(constants::CameraLeft_Port, m_color_red, m_color_blue) },
     // m_camera_right{ vex::aivision(constants::CameraRight_Port, m_color_red, m_color_blue) }
 {
-    // m_camera_front.colorDetection(false);
-    // m_camera_front.tagDetection(true);
+    // m_camera_front->colorDetection(false);
+    // m_camera_front->tagDetection(true);
     
     // m_camera_left.colorDetection(false);
     // m_camera_left.tagDetection(true);
@@ -55,25 +57,29 @@ CameraReader::CameraReader():
     // m_camera_right.tagDetection(true);
 };
 CameraReader::~CameraReader() {
-    
+    delete m_camera_front;
+    m_camera_front = nullptr;
 };
 
+void CameraReader::init() {
+    m_camera_front = new vex::aivision(constants::CameraFront_Port, m_color_red, m_color_blue, m_color_white);
+};
 void CameraReader::periodic() {
 
 };
 
-vex::aivision::object* CameraReader::getLargestOfColors(vex::aivision camera, vex::aivision::colordesc color1, vex::aivision::colordesc color2) {
+vex::aivision::object* CameraReader::getLargestOfColors(vex::aivision* camera, vex::aivision::colordesc color1, vex::aivision::colordesc color2) {
     vex::aivision::object* obj1{ nullptr };
     vex::aivision::object* obj2{ nullptr };
 
-    camera.takeSnapshot(color1);
-    if (camera.objectCount > 0) {
-        obj1 = &camera.largestObject;
+    camera->takeSnapshot(color1);
+    if (camera->objectCount > 0) {
+        obj1 = &camera->largestObject;
     }
 
-    camera.takeSnapshot(color2);
-    if (camera.objectCount > 0) {
-        obj2 = &camera.largestObject;
+    camera->takeSnapshot(color2);
+    if (camera->objectCount > 0) {
+        obj2 = &camera->largestObject;
     }
 
     if (obj1 == nullptr && obj2 == nullptr) {
@@ -94,10 +100,10 @@ vex::aivision::object* CameraReader::getLargestOfColors(vex::aivision camera, ve
 };
 
 BoundingBox* CameraReader::getLargestTagFront() {
-    m_camera_front.takeSnapshot(vex::aivision::ALL_TAGS);
+    m_camera_front->takeSnapshot(vex::aivision::ALL_TAGS);
 
-    if (m_camera_front.objectCount > 0) {
-        vex::aivision::object obj = m_camera_front.largestObject;
+    if (m_camera_front->objectCount > 0) {
+        vex::aivision::object obj = m_camera_front->largestObject;
         BoundingBox* ret = new BoundingBox( // (0, 0) is center of grid
             obj.centerX - (constants::Camera_Viewport_Width / 2),
             obj.centerY - (constants::Camera_Viewport_Height / 2),
@@ -118,17 +124,17 @@ BoundingBox* CameraReader::getLargestScoringFront() {
             obj->width,
             obj->height
         );
-        delete obj;
+        // delete obj; // DO NOT Delete obj (it points to a vex object)
         obj = nullptr;
         return ret;
     }
     return nullptr;
 };
 BoundingBox* CameraReader::getLargestBatteryFront() {
-    m_camera_front.takeSnapshot(m_color_white);
+    m_camera_front->takeSnapshot(m_color_white);
 
-    if (m_camera_front.objectCount > 0) {
-        vex::aivision::object obj = m_camera_front.largestObject;
+    if (m_camera_front->objectCount > 0) {
+        vex::aivision::object obj = m_camera_front->largestObject;
         BoundingBox* ret = new BoundingBox( // (0, 0) is center of grid
             obj.centerX - (constants::Camera_Viewport_Width / 2),
             obj.centerY - (constants::Camera_Viewport_Height / 2),

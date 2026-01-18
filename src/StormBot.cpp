@@ -28,35 +28,35 @@ StormBot::~StormBot() {
 };
 
 void StormBot::robotPeriodic() {
-    atmt::platform_print("Robot Periodic...");
+    atmt::platform_print("Robot Periodic...     ");
 };
 
 void StormBot::disabledInit() {
-    atmt::platform_print("Disabled Init!");
+    atmt::platform_println("Disabled Init!");
 };
 void StormBot::disabledPeriodic() {
-    atmt::platform_print("Disabled Periodic...");
+    atmt::platform_println("Disabled Periodic...");
 };
 void StormBot::disabledExit() {
-    atmt::platform_print("Disabled Exit");
+    atmt::platform_println("Disabled Exit");
 };
 
 void StormBot::autonomousInit() {
-    atmt::platform_print("Autonomous Init!");
+    atmt::platform_println("Autonomous Init!");
 };
 void StormBot::autonomousPeriodic() {
-    atmt::platform_print("Autonomous Periodic...");
+    atmt::platform_println("Autonomous Periodic...");
 };
 void StormBot::autonomousExit() {
-    atmt::platform_print("Autonomous Exit");
+    atmt::platform_println("Autonomous Exit");
 };
 
 void StormBot::teleopInit() {
-    atmt::platform_print("Teleop Init!");
+    atmt::platform_println("Teleop Init!");
 };
 void StormBot::teleopPeriodic() {
-    atmt::platform_print("Teleop Periodic...");
+    atmt::platform_println("Teleop Periodic...");
 };
 void StormBot::teleopExit() {
-    atmt::platform_print("Teleop Exit");
+    atmt::platform_println("Teleop Exit");
 };

@@ -10,6 +10,7 @@ class Drivetrain : public atmt::Subsystem {
         Drivetrain(); // No destructor because I don't want to override
         ~Drivetrain() override;
 
+        void init() override;
         void periodic() override;
 
         void setDrive(int x_power, int y_power, int r_power);
@@ -17,10 +18,10 @@ class Drivetrain : public atmt::Subsystem {
         void lockDrive();
 
     private:
-        vex::motor m_motor_bl;
-        vex::motor m_motor_br;
-        vex::motor m_motor_fl;
-        vex::motor m_motor_fr;
+        vex::motor* m_motor_bl;
+        vex::motor* m_motor_br;
+        vex::motor* m_motor_fl;
+        vex::motor* m_motor_fr;
 
         vex::inertial m_gyro;
 };

@@ -10,6 +10,7 @@ class TeleopDriveCommand : public atmt::Command {
         TeleopDriveCommand(Drivetrain* drivetrain, atmt::Joystick* driver_controller); // Put subsystems as parameters
         TeleopDriveCommand(TeleopDriveCommand& command); // Copy constructor
         ~TeleopDriveCommand();
+        atmt::Command* clone() const override;
 
         void initialize() override; // User-made
         void execute() override; // User-made

@@ -24,6 +24,9 @@ ApproachAndAlign::ApproachAndAlign(ApproachAndAlign& command):
 ApproachAndAlign::~ApproachAndAlign() {
     // Will run ~Command() after this is complete
 };
+atmt::Command* ApproachAndAlign::clone() const {
+    return new ApproachAndAlign(m_drivetrain, m_cameras);
+};
 
 void ApproachAndAlign::initialize() {
 

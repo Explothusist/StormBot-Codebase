@@ -4,7 +4,7 @@ Codebase for the University of Arkansas RIOT (Robotics Interdisciplinary Organiz
 
 Used in parallel with Explothusist/StormBot-Esp32-Codebase. Our robot includes both a VEX v5 Brain and an Esp32 chip.
 
-Esp32 Codebase: https://github.com/Explothusist/StormBot-Codebase
+Esp32 Codebase: https://github.com/Explothusist/StormBot-Esp32-Codebase
 
 Uark RIOT website: https://riotrobotics.org/
 

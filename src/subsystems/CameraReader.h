@@ -23,9 +23,10 @@ class CameraReader : public atmt::Subsystem {
         CameraReader(); // No destructor because I don't want to override
         ~CameraReader() override;
 
+        void init() override;
         void periodic() override;
 
-        vex::aivision::object* getLargestOfColors(vex::aivision camera, vex::aivision::colordesc color1, vex::aivision::colordesc color2);
+        vex::aivision::object* getLargestOfColors(vex::aivision* camera, vex::aivision::colordesc color1, vex::aivision::colordesc color2);
 
         BoundingBox* getLargestTagFront();
         BoundingBox* getLargestScoringFront();
@@ -36,7 +37,8 @@ class CameraReader : public atmt::Subsystem {
         vex::aivision::colordesc m_color_blue;
         vex::aivision::colordesc m_color_white;
 
-        vex::aivision m_camera_front;
+        vex::aivision* m_camera_front;
+        
         // vex::aivision m_camera_left;
         // vex::aivision m_camera_right;
 };

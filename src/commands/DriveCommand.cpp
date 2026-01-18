@@ -23,6 +23,9 @@ DriveCommand::DriveCommand(DriveCommand& command):
 DriveCommand::~DriveCommand() {
     // Will run ~Command() after this is complete
 };
+atmt::Command* DriveCommand::clone() const {
+    return new DriveCommand(m_drivetrain, m_x_power, m_y_power, m_r_power);
+};
 
 void DriveCommand::initialize() {
     m_drivetrain->setDrive(

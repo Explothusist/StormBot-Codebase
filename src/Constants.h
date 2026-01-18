@@ -11,13 +11,13 @@ namespace constants {
 
     // Drivetrain
     int const MotorBL_Port = vex::PORT1;
-    int const MotorBR_Port = vex::PORT2;
-    int const MotorFL_Port = vex::PORT3;
-    int const MotorFR_Port = vex::PORT4;
+    int const MotorBR_Port = vex::PORT11;
+    int const MotorFL_Port = vex::PORT10;
+    int const MotorFR_Port = vex::PORT20;
 
     int const Gyro_Port = vex::PORT5;
 
-    double const Drivetrain_Speed = 0.30; // Percent
+    double const Drivetrain_Speed = 1.0; // Percent
 
     // Drivetrain Align
     double const Min_Speed_To_Move = 0.12; // Determine experimentally

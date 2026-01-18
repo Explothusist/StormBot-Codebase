@@ -17,20 +17,23 @@ TeleopDriveCommand::TeleopDriveCommand(TeleopDriveCommand& command):
 TeleopDriveCommand::~TeleopDriveCommand() {
     // Will run ~Command() after this is complete
 };
+atmt::Command* TeleopDriveCommand::clone() const {
+    return new TeleopDriveCommand(m_drivetrain, m_driver_controller);
+};
 
 void TeleopDriveCommand::initialize() {
 
 };
 void TeleopDriveCommand::execute() {
-    int rotation = m_driver_controller->getRawAxis(atmt::Axis4);
+    int rotation = m_driver_controller->getRawAxis(atmt::Axis1);
 
     if (m_driver_controller->getButtonState(atmt::L2Button) != atmt::ButtonPressed) {
         rotation = 0; // Lock rotation unless holding Z-target
     }
 
     m_drivetrain->setDrive(
-        m_driver_controller->getRawAxis(atmt::Axis1),
-        m_driver_controller->getRawAxis(atmt::Axis2),
+        m_driver_controller->getRawAxis(atmt::Axis4),
+        m_driver_controller->getRawAxis(atmt::Axis3),
         rotation
     );
 };

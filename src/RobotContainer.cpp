@@ -16,15 +16,15 @@ RobotContainer::RobotContainer():
 {
 
 };
-RobotContainer::~RobotContainer() {
-    delete m_drivetrain;
-    m_drivetrain = nullptr;
-    delete m_camera_reader;
-    m_camera_reader = nullptr;
-    delete m_driver_controller;
-    m_driver_controller = nullptr;
-    delete m_operator_controller;
-    m_operator_controller = nullptr;
+RobotContainer::~RobotContainer() { // Actually deleted by atmt::TimedRobot
+    // delete m_drivetrain;
+    // m_drivetrain = nullptr;
+    // delete m_camera_reader;
+    // m_camera_reader = nullptr;
+    // delete m_driver_controller;
+    // m_driver_controller = nullptr;
+    // delete m_operator_controller;
+    // m_operator_controller = nullptr;
 };
 
 void RobotContainer::configure_bindings() {

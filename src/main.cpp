@@ -10,10 +10,12 @@
 
 #include "StormBot.h"
 
-StormBot* m_robot{ new StormBot() };
+StormBot m_robot{ StormBot() };
 
 int main() {
+    atmt::platform_println("Starting");
 
-    m_robot->startLoop();
+    m_robot.startLoop();
 
+    atmt::platform_println("Ending");
 };
