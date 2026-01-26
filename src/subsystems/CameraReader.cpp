@@ -21,11 +21,11 @@ BoundingBox::~BoundingBox() {
 };
 
 double BoundingBox::getApproxDistance(int actual_width, int actual_height) {
-    double width_ratio = static_cast<double>(m_width) / static_cast<double>(constants::Camera_Viewport_Width); // Pixels/Pixels = Percentage
-    double height_ratio = static_cast<double>(m_height) / static_cast<double>(constants::Camera_Viewport_Height); // Percent of Viewport
+    double width_ratio = static_cast<double>(m_width) / static_cast<double>(constants::camera::Camera_Viewport_Width); // Pixels/Pixels = Percentage
+    double height_ratio = static_cast<double>(m_height) / static_cast<double>(constants::camera::Camera_Viewport_Height); // Percent of Viewport
 
-    width_ratio *= constants::Camera_FOV_Horizontal / 360; // Percentage * Percentage = Percentage
-    height_ratio *= constants::Camera_FOV_Vertical / 360; // Percent of Circle
+    width_ratio *= constants::camera::Camera_FOV_Horizontal / 360; // Percentage * Percentage = Percentage
+    height_ratio *= constants::camera::Camera_FOV_Vertical / 360; // Percent of Circle
 
     width_ratio *= M_PI * 2; // Percentage * Radians = Radians
     height_ratio *= M_PI * 2; // Radians!
@@ -42,10 +42,10 @@ CameraReader::CameraReader():
     m_color_blue{ vex::aivision::colordesc(1, 0, 0, 255, 20, 0.2) },
     m_color_white{ vex::aivision::colordesc(1, 255, 255, 255, 180, 0.2) },
     m_camera_front{ nullptr }//,
-    // m_camera_front{ vex::aivision(constants::CameraFront_Port, m_color_red, m_color_blue, m_color_white) }//,
+    // m_camera_front{ vex::aivision(constants::camera::CameraFront_Port, m_color_red, m_color_blue, m_color_white) }//,
 
-    // m_camera_left{ vex::aivision(constants::CameraLeft_Port, m_color_red, m_color_blue) },
-    // m_camera_right{ vex::aivision(constants::CameraRight_Port, m_color_red, m_color_blue) }
+    // m_camera_left{ vex::aivision(constants::camera::CameraLeft_Port, m_color_red, m_color_blue) },
+    // m_camera_right{ vex::aivision(constants::camera::CameraRight_Port, m_color_red, m_color_blue) }
 {
     // m_camera_front->colorDetection(false);
     // m_camera_front->tagDetection(true);
@@ -62,7 +62,7 @@ CameraReader::~CameraReader() {
 };
 
 void CameraReader::init() {
-    m_camera_front = new vex::aivision(constants::CameraFront_Port, m_color_red, m_color_blue, m_color_white);
+    m_camera_front = new vex::aivision(constants::ports::CameraFront_Port, m_color_red, m_color_blue, m_color_white);
 };
 void CameraReader::periodic() {
 
@@ -105,8 +105,8 @@ BoundingBox* CameraReader::getLargestTagFront() {
     if (m_camera_front->objectCount > 0) {
         vex::aivision::object obj = m_camera_front->largestObject;
         BoundingBox* ret = new BoundingBox( // (0, 0) is center of grid
-            obj.centerX - (constants::Camera_Viewport_Width / 2),
-            obj.centerY - (constants::Camera_Viewport_Height / 2),
+            obj.centerX - (constants::camera::Camera_Viewport_Width / 2),
+            obj.centerY - (constants::camera::Camera_Viewport_Height / 2),
             obj.width,
             obj.height
         );
@@ -119,8 +119,8 @@ BoundingBox* CameraReader::getLargestScoringFront() {
 
     if (obj != nullptr) {
         BoundingBox* ret = new BoundingBox( // (0, 0) is center of grid
-            obj->centerX - (constants::Camera_Viewport_Width / 2),
-            obj->centerY - (constants::Camera_Viewport_Height / 2),
+            obj->centerX - (constants::camera::Camera_Viewport_Width / 2),
+            obj->centerY - (constants::camera::Camera_Viewport_Height / 2),
             obj->width,
             obj->height
         );
@@ -136,8 +136,8 @@ BoundingBox* CameraReader::getLargestBatteryFront() {
     if (m_camera_front->objectCount > 0) {
         vex::aivision::object obj = m_camera_front->largestObject;
         BoundingBox* ret = new BoundingBox( // (0, 0) is center of grid
-            obj.centerX - (constants::Camera_Viewport_Width / 2),
-            obj.centerY - (constants::Camera_Viewport_Height / 2),
+            obj.centerX - (constants::camera::Camera_Viewport_Width / 2),
+            obj.centerY - (constants::camera::Camera_Viewport_Height / 2),
             obj.width,
             obj.height
         );

@@ -7,7 +7,7 @@
 
 class Drivetrain : public atmt::Subsystem {
     public:
-        Drivetrain(); // No destructor because I don't want to override
+        Drivetrain();
         ~Drivetrain() override;
 
         void init() override;

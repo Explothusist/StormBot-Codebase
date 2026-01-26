@@ -6,7 +6,7 @@
 #include "Constants.h"
 
 StormBot::StormBot():
-    atmt::TimedRobot(constants::AutonomousLength),
+    atmt::TimedRobot(constants::robot::AutonomousLength),
     m_bot_cont{ new RobotContainer() }
 {
     setUsesCompetition(false); // VEX-specific, must be set before startLoop()

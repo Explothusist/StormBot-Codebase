@@ -36,29 +36,29 @@ void AlignAndPounce::execute() {
 
     if (
         object != nullptr && 
-        object->m_width >= constants::Battery_Insignificant && 
-        object->m_height >= constants::Battery_Insignificant
+        object->m_width >= constants::camera::Battery_Insignificant && 
+        object->m_height >= constants::camera::Battery_Insignificant
     ) {
         m_invisibility_count = 0;
         if (
             m_last_dist == -1 || 
             m_check_dist_counter > 10 || 
-            (m_last_dist <= constants::Pounce_Slow_At_Distance && m_check_dist_counter > 5) || 
-            (m_last_dist <= constants::Pounce_Slow_At_Distance/2 && m_check_dist_counter > 2)
+            (m_last_dist <= constants::drivetrain::align::Pounce_Slow_At_Distance && m_check_dist_counter > 5) || 
+            (m_last_dist <= constants::drivetrain::align::Pounce_Slow_At_Distance/2 && m_check_dist_counter > 2)
         ) { // Check with more frequency as we get closer (because checking costs time)
-            m_last_dist = object->getApproxDistance(constants::Battery_Actual_Width, constants::Battery_Actual_Height);
+            m_last_dist = object->getApproxDistance(constants::camera::Battery_Actual_Width, constants::camera::Battery_Actual_Height);
         }
         m_last_offset = object->m_center_x;
 
-        int min_speed = object->m_center_x >= 0 ? constants::Min_Speed_To_Move : -constants::Min_Speed_To_Move;
-        double obj_percent_pos = static_cast<double>(object->m_center_x) / static_cast<double>(constants::Camera_Viewport_Width);
-        int bonus_speed = constants::Pounce_Max_Speed_LR - constants::Min_Speed_To_Move;
+        int min_speed = object->m_center_x >= 0 ? constants::drivetrain::align::Min_Speed_To_Move : -constants::drivetrain::align::Min_Speed_To_Move;
+        double obj_percent_pos = static_cast<double>(object->m_center_x) / static_cast<double>(constants::camera::Camera_Viewport_Width);
+        int bonus_speed = constants::drivetrain::align::Pounce_Max_Speed_LR - constants::drivetrain::align::Min_Speed_To_Move;
 
         double drive_lr = min_speed + (obj_percent_pos * bonus_speed); // in percentage
 
-        min_speed = constants::Pounce_Min_Speed_FB;
-        obj_percent_pos = std::min(m_last_dist / constants::Pounce_Slow_At_Distance, 1.0);
-        bonus_speed = constants::Pounce_Max_Speed_FB - constants::Pounce_Min_Speed_FB;
+        min_speed = constants::drivetrain::align::Pounce_Min_Speed_FB;
+        obj_percent_pos = std::min(m_last_dist / constants::drivetrain::align::Pounce_Slow_At_Distance, 1.0);
+        bonus_speed = constants::drivetrain::align::Pounce_Max_Speed_FB - constants::drivetrain::align::Pounce_Min_Speed_FB;
 
         double drive_fb = min_speed + (obj_percent_pos * bonus_speed); // in percentage
 
@@ -78,6 +78,6 @@ void AlignAndPounce::end(bool interrupted) {
 };
 bool AlignAndPounce::is_finished() {
     return 
-        (std::abs(m_last_dist) < constants::Pounce_Epsilon_FB && std::abs(m_last_offset) < constants::Pounce_Epsilon_LR) ||
+        (std::abs(m_last_dist) < constants::drivetrain::align::Pounce_Epsilon_FB && std::abs(m_last_offset) < constants::drivetrain::align::Pounce_Epsilon_LR) ||
         (m_invisibility_count > 20);
 };

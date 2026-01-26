@@ -10,7 +10,7 @@ Drivetrain::Drivetrain():
     m_motor_br{ nullptr },
     m_motor_fl{ nullptr },
     m_motor_fr{ nullptr },
-    m_gyro{ vex::inertial(constants::Gyro_Port, vex::turnType::right) } // Calibrates on program launch
+    m_gyro{ vex::inertial(constants::ports::Gyro_Port, vex::turnType::right) } // Calibrates on program launch
 {
 
 };
@@ -19,10 +19,10 @@ Drivetrain::~Drivetrain() {
 };
 
 void Drivetrain::init() {
-    m_motor_bl = new vex::motor(constants::MotorBL_Port, vex::gearSetting::ratio18_1, false);
-    m_motor_br = new vex::motor(constants::MotorBR_Port, vex::gearSetting::ratio18_1, false);
-    m_motor_fl = new vex::motor(constants::MotorFL_Port, vex::gearSetting::ratio18_1, false);
-    m_motor_fr = new vex::motor(constants::MotorFR_Port, vex::gearSetting::ratio18_1, false);
+    m_motor_bl = new vex::motor(constants::ports::MotorBL_Port, vex::gearSetting::ratio18_1, false);
+    m_motor_br = new vex::motor(constants::ports::MotorBR_Port, vex::gearSetting::ratio18_1, false);
+    m_motor_fl = new vex::motor(constants::ports::MotorFL_Port, vex::gearSetting::ratio18_1, false);
+    m_motor_fr = new vex::motor(constants::ports::MotorFR_Port, vex::gearSetting::ratio18_1, false);
 };
 void Drivetrain::periodic() {
 
@@ -56,10 +56,10 @@ void Drivetrain::setDrive(int x_power, int y_power, int r_power) {
         power_br *= scale;
     }
 
-    power_fl *= constants::Drivetrain_Speed;
-    power_fr *= constants::Drivetrain_Speed;
-    power_bl *= constants::Drivetrain_Speed;
-    power_br *= constants::Drivetrain_Speed;
+    power_fl *= constants::drivetrain::Drivetrain_Speed;
+    power_fr *= constants::drivetrain::Drivetrain_Speed;
+    power_bl *= constants::drivetrain::Drivetrain_Speed;
+    power_br *= constants::drivetrain::Drivetrain_Speed;
 
     auto applyMotor = [&](vex::motor* motor, double velocity) {
         int int_velocity = static_cast<int>(std::round(std::abs(velocity)));
