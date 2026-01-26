@@ -2,6 +2,7 @@
 #include "Drivetrain.h"
 
 #include <cmath>
+#include "../Automat/utils.h" // Printing
 #include "../Constants.h"
 
 Drivetrain::Drivetrain():
@@ -10,7 +11,7 @@ Drivetrain::Drivetrain():
     m_motor_br{ nullptr },
     m_motor_fl{ nullptr },
     m_motor_fr{ nullptr },
-    m_gyro{ vex::inertial(constants::ports::Gyro_Port, vex::turnType::right) } // Calibrates on program launch
+    m_gyro{ nullptr }
 {
 
 };
@@ -23,6 +24,9 @@ void Drivetrain::init() {
     m_motor_br = new vex::motor(constants::ports::MotorBR_Port, vex::gearSetting::ratio18_1, false);
     m_motor_fl = new vex::motor(constants::ports::MotorFL_Port, vex::gearSetting::ratio18_1, false);
     m_motor_fr = new vex::motor(constants::ports::MotorFR_Port, vex::gearSetting::ratio18_1, false);
+    m_gyro = new vex::inertial(constants::ports::Gyro_Port, vex::turnType::right);
+
+    m_gyro->calibrate();
 };
 void Drivetrain::periodic() {
 
@@ -30,11 +34,20 @@ void Drivetrain::periodic() {
 
 void Drivetrain::setDrive(int x_power, int y_power, int r_power) {
     atmt::Vector_2D vector{ atmt::Vector_2D(static_cast<double>(x_power), static_cast<double>(y_power)) };
-    vector.rotate( // Add some offset, probably
-        atmt::degreesToRadians(
-            -m_gyro.heading(vex::rotationUnits::deg) // Direction correct IF increases CCW
-        )
-    );
+    if (m_gyro->isCalibrating()) {
+#ifdef AUTOMAT_VEX_ // DEBUG
+        atmt::m_brain.Screen.print("Gyro Still Calibrating!");
+#endif
+    }else {
+#ifdef AUTOMAT_VEX_ // DEBUG
+        atmt::m_brain.Screen.print("Heading: %d ", m_gyro->heading(vex::rotationUnits::deg));
+#endif
+        vector.rotate( // Add some offset, probably
+            atmt::degreesToRadians(
+                m_gyro->heading(vex::rotationUnits::deg) // Direction correct, increases CW
+            )
+        );
+    }
     double x_amt = vector.getX();
     double y_amt = vector.getY();
 
@@ -88,4 +101,8 @@ void Drivetrain::lockDrive() {
     m_motor_fr->stop(vex::brakeType::brake);
     m_motor_bl->stop(vex::brakeType::brake);
     m_motor_br->stop(vex::brakeType::brake);
+};
+
+double Drivetrain::getHeading() {
+    return m_gyro->heading();
 };

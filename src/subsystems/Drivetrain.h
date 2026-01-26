@@ -17,13 +17,15 @@ class Drivetrain : public atmt::Subsystem {
         void stopDrive();
         void lockDrive();
 
+        double getHeading();
+
     private:
         vex::motor* m_motor_bl;
         vex::motor* m_motor_br;
         vex::motor* m_motor_fl;
         vex::motor* m_motor_fr;
 
-        vex::inertial m_gyro;
+        vex::inertial* m_gyro;
 };
 
 #endif

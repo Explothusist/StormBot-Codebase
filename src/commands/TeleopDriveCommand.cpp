@@ -1,6 +1,9 @@
 
 #include "TeleopDriveCommand.h"
 
+#include <cmath>
+#include "../Constants.h"
+
 TeleopDriveCommand::TeleopDriveCommand(Drivetrain* drivetrain, atmt::Joystick* driver_controller):
     atmt::Command(),
     m_drivetrain{ drivetrain },
@@ -25,10 +28,24 @@ void TeleopDriveCommand::initialize() {
 
 };
 void TeleopDriveCommand::execute() {
-    int rotation = m_driver_controller->getRawAxis(atmt::Axis1);
+    int rotation = 0;
 
     if (m_driver_controller->getButtonState(atmt::L2Button) != atmt::ButtonPressed) {
-        rotation = 0; // Lock rotation unless holding Z-target
+        // rotation = 0; // Lock rotation unless holding Z-target
+        double heading = m_drivetrain->getHeading();
+        if (heading > 180) {
+            heading -= 360;
+        }
+        if (std::abs(heading) > constants::drivetrain::RotationCorrect_Threshold) {
+            double min_speed = constants::drivetrain::RotationCorrect_MinSpeed;
+            double obj_percent_pos = std::min(std::abs(heading) / constants::drivetrain::RotationCorrect_Range, 1.0);
+            double bonus_speed = constants::drivetrain::RotationCorrect_MaxSpeed - constants::drivetrain::RotationCorrect_MinSpeed;
+            double sign = heading != 0 ? -heading / std::abs(heading) : 1;
+
+            rotation = (min_speed + (obj_percent_pos * bonus_speed)) * 100 * sign; // in percentage
+        }
+    }else {
+        rotation = m_driver_controller->getRawAxis(atmt::Axis1);
     }
 
     m_drivetrain->setDrive(

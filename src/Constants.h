@@ -7,7 +7,8 @@
 namespace constants {
 
     namespace robot {
-        int const AutonomousLength = 30; // Seconds
+        // int const AutonomousLength = 30; // Seconds
+        int const AutonomousLength = 3; // Seconds
     };
 
     namespace ports {
@@ -16,7 +17,7 @@ namespace constants {
         int const MotorFL_Port = vex::PORT10;
         int const MotorFR_Port = vex::PORT20;
         int const Gyro_Port = vex::PORT5;
-        
+
         int const Serial_Port = vex::PORT2;
 
         int const CameraFront_Port = vex::PORT6;
@@ -24,6 +25,11 @@ namespace constants {
 
     namespace drivetrain {
         double const Drivetrain_Speed = 1.0; // Percent
+
+        double const RotationCorrect_Threshold = 2.0; // Degrees
+        double const RotationCorrect_MinSpeed = 0.05;
+        double const RotationCorrect_MaxSpeed = 0.3;
+        double const RotationCorrect_Range = 15.0; // Degrees
 
         namespace align {
             double const Min_Speed_To_Move = 0.12; // Determine experimentally
