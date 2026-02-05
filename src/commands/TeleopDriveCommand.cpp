@@ -37,20 +37,30 @@ void TeleopDriveCommand::execute() {
             heading -= 360;
         }
         if (std::abs(heading) > constants::drivetrain::RotationCorrect_Threshold) {
-            double min_speed = constants::drivetrain::RotationCorrect_MinSpeed;
-            double obj_percent_pos = std::min(std::abs(heading) / constants::drivetrain::RotationCorrect_Range, 1.0);
-            double bonus_speed = constants::drivetrain::RotationCorrect_MaxSpeed - constants::drivetrain::RotationCorrect_MinSpeed;
-            double sign = heading != 0 ? -heading / std::abs(heading) : 1;
+            // double min_speed = constants::drivetrain::RotationCorrect_MinSpeed;
+            // double obj_percent_pos = std::min(std::abs(heading) / constants::drivetrain::RotationCorrect_Range, 1.0);
+            // double bonus_speed = constants::drivetrain::RotationCorrect_MaxSpeed - constants::drivetrain::RotationCorrect_MinSpeed;
+            // double sign = heading != 0 ? -heading / std::abs(heading) : 1;
 
-            rotation = (min_speed + (obj_percent_pos * bonus_speed)) * 100 * sign; // in percentage
+            // rotation = (min_speed + (obj_percent_pos * bonus_speed)) * 100 * sign; // in percentage
+            rotation = static_cast<int>(atmt::getProportional(
+                heading, 
+                constants::drivetrain::RotationCorrect_Threshold, 
+                constants::drivetrain::RotationCorrect_Range,
+                constants::drivetrain::RotationCorrect_MinSpeed,
+                constants::drivetrain::RotationCorrect_MaxSpeed
+            ) * -1 * 100);
+#ifdef AUTOMAT_VEX_ // DEBUG
+        atmt::m_brain.Screen.print("Rotation: %d ", rotation);
+#endif
         }
     }else {
-        rotation = m_driver_controller->getRawAxis(atmt::Axis1);
+        rotation = m_driver_controller->getRawAxis(atmt::AxisRX);
     }
 
     m_drivetrain->setDrive(
-        m_driver_controller->getRawAxis(atmt::Axis4),
-        m_driver_controller->getRawAxis(atmt::Axis3),
+        m_driver_controller->getRawAxis(atmt::AxisLX),
+        m_driver_controller->getRawAxis(atmt::AxisLY),
         rotation
     );
 };

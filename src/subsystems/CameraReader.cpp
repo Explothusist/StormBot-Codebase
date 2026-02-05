@@ -40,7 +40,10 @@ CameraReader::CameraReader():
     atmt::Subsystem(),
     m_color_red{ vex::aivision::colordesc(1, 255, 0, 0, 20, 0.2) },
     m_color_blue{ vex::aivision::colordesc(1, 0, 0, 255, 20, 0.2) },
-    m_color_white{ vex::aivision::colordesc(1, 255, 255, 255, 180, 0.2) },
+    // m_color_white{ vex::aivision::colordesc(1, 255, 255, 255, 180, 0.2) },
+    // m_color_white{ vex::aivision::colordesc(1, 92, 92, 92, 180, 0.2) },
+    // m_color_white{ vex::aivision::colordesc(1, 130, 107, 87, 20, 0.3) },
+    m_color_white{ vex::aivision::colordesc(1, 176, 60, 29, 10, 0.2) },
     m_camera_front{ nullptr }//,
     // m_camera_front{ vex::aivision(constants::camera::CameraFront_Port, m_color_red, m_color_blue, m_color_white) }//,
 
@@ -65,7 +68,12 @@ void CameraReader::init() {
     m_camera_front = new vex::aivision(constants::ports::CameraFront_Port, m_color_red, m_color_blue, m_color_white);
 };
 void CameraReader::periodic() {
-
+    BoundingBox* obj = getLargestBatteryFront();
+    if (obj != nullptr) {
+#ifdef AUTOMAT_VEX_ // DEBUG
+        atmt::m_brain.Screen.print("OBJECT SIGHTED!!! x: %i y: %i ", std::round(obj->m_center_x), std::round(obj->m_center_y));
+#endif
+    }
 };
 
 vex::aivision::object* CameraReader::getLargestOfColors(vex::aivision* camera, vex::aivision::colordesc color1, vex::aivision::colordesc color2) {

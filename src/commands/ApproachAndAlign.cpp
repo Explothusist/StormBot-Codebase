@@ -3,6 +3,7 @@
 
 #include <cmath>
 
+#include "../Automat/utils.h"
 #include "../Constants.h"
 
 ApproachAndAlign::ApproachAndAlign(Drivetrain* drivetrain, CameraReader* cameras):
@@ -50,17 +51,33 @@ void ApproachAndAlign::execute() {
         }
         m_last_offset = object->m_center_x;
 
-        int min_speed = object->m_center_x >= 0 ? constants::drivetrain::align::Min_Speed_To_Move : -constants::drivetrain::align::Min_Speed_To_Move;
-        double obj_percent_pos = static_cast<double>(object->m_center_x) / static_cast<double>(constants::camera::Camera_Viewport_Width);
-        int bonus_speed = constants::drivetrain::align::Align_Max_Speed_LR - constants::drivetrain::align::Min_Speed_To_Move;
+        // int min_speed = object->m_center_x >= 0 ? constants::drivetrain::align::Min_Speed_To_Move : -constants::drivetrain::align::Min_Speed_To_Move;
+        // double obj_percent_pos = static_cast<double>(object->m_center_x) / static_cast<double>(constants::camera::Camera_Viewport_Width);
+        // int bonus_speed = constants::drivetrain::align::Align_Max_Speed_LR - constants::drivetrain::align::Min_Speed_To_Move;
 
-        double drive_lr = min_speed + (obj_percent_pos * bonus_speed); // in percentage
+        // double drive_lr = min_speed + (obj_percent_pos * bonus_speed); // in percentage
 
-        min_speed = constants::drivetrain::align::Align_Min_Speed_FB;
-        obj_percent_pos = std::min(m_last_dist / constants::drivetrain::align::Align_Slow_At_Distance, 1.0);
-        bonus_speed = constants::drivetrain::align::Align_Max_Speed_FB - constants::drivetrain::align::Align_Min_Speed_FB;
+        double drive_lr = atmt::getProportional(
+            object->m_center_x, 
+            0.0, 
+            constants::camera::Camera_Viewport_Width, 
+            constants::drivetrain::align::Min_Speed_To_Move, 
+            constants::drivetrain::align::Align_Max_Speed_LR
+        );
 
-        double drive_fb = min_speed + (obj_percent_pos * bonus_speed); // in percentage
+        // min_speed = constants::drivetrain::align::Align_Min_Speed_FB;
+        // obj_percent_pos = std::min(m_last_dist / constants::drivetrain::align::Align_Slow_At_Distance, 1.0);
+        // bonus_speed = constants::drivetrain::align::Align_Max_Speed_FB - constants::drivetrain::align::Align_Min_Speed_FB;
+
+        // double drive_fb = min_speed + (obj_percent_pos * bonus_speed); // in percentage
+
+        double drive_fb = atmt::getProportional(
+            m_last_dist, 
+            0.0, 
+            constants::drivetrain::align::Align_Slow_At_Distance, 
+            constants::drivetrain::align::Align_Min_Speed_FB, 
+            constants::drivetrain::align::Align_Max_Speed_FB
+        );
 
         m_drivetrain->setDrive(
             static_cast<int>(std::round(drive_lr * 100.0)), // In joystick -100 to 100

@@ -26,16 +26,16 @@ namespace constants {
     namespace drivetrain {
         double const Drivetrain_Speed = 1.0; // Percent
 
-        double const RotationCorrect_Threshold = 2.0; // Degrees
-        double const RotationCorrect_MinSpeed = 0.05;
-        double const RotationCorrect_MaxSpeed = 0.3;
+        double const RotationCorrect_Threshold = 1.0; // Degrees
+        double const RotationCorrect_MinSpeed = 0.03;
+        double const RotationCorrect_MaxSpeed = 0.4;
         double const RotationCorrect_Range = 15.0; // Degrees
 
         namespace align {
-            double const Min_Speed_To_Move = 0.12; // Determine experimentally
+            double const Min_Speed_To_Move = 0.03; // Determine experimentally
 
             double const Align_Max_Speed_LR = 0.30; // Gradient, Left/Right
-            double const Align_Min_Speed_FB = Min_Speed_To_Move + 0.04;
+            double const Align_Min_Speed_FB = Min_Speed_To_Move + 0.0;
             double const Align_Max_Speed_FB = 0.30; // Gradient, Forward/Backward
 
             double const Align_Slow_At_Distance = 12.0; // in inches
@@ -43,11 +43,12 @@ namespace constants {
             double const Align_Epsilon_LR = 20.0; // In camera pixels
             double const Align_Epsilon_FB = 2.0; // In inches
 
-            double const Pounce_Max_Speed_LR = 0.30;
+            double const Pounce_Max_Speed_LR = 0.50;
             double const Pounce_Min_Speed_FB = Min_Speed_To_Move;
             double const Pounce_Max_Speed_FB = 0.20;
 
             double const Pounce_Slow_At_Distance = 12.0;
+            double const Pounce_Stop_At_Distance = 2.0;
             double const Pounce_Epsilon_LR = 20.0;
             double const Pounce_Epsilon_FB = 2.0;
         };
