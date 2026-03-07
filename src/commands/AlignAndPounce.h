@@ -2,7 +2,7 @@
 #ifndef STORMBOT_ALIGN_AND_POUNCE_
 #define STORMBOT_ALIGN_AND_POUNCE_
 
-#include "../Automat/Command.h"
+#include "../Automat/command_based/Command.h"
 #include "../subsystems/Drivetrain.h"
 #include "../subsystems/CameraReader.h"
 

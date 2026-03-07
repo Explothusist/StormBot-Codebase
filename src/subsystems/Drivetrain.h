@@ -2,7 +2,7 @@
 #ifndef STORMBOT_DRIVETRAIN_
 #define STORMBOT_DRIVETRAIN_
 
-#include "../Automat/Subsystem.h"
+#include "../Automat/command_based/Subsystem.h"
 #include "vex.h"
 
 class Drivetrain : public atmt::Subsystem {

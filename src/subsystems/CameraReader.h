@@ -2,7 +2,7 @@
 #ifndef STORMBOT_CAMERA_
 #define STORMBOT_CAMERA_
 
-#include "../Automat/Subsystem.h"
+#include "../Automat/command_based/Subsystem.h"
 #include "vex.h"
 
 class BoundingBox {

@@ -2,7 +2,7 @@
 #define STORMBOT_SERIAL_READER_
 
 #include <string>
-#include "../Automat/Subsystem.h"
+#include "../Automat/command_based/Subsystem.h"
 #include "vex.h"
 
 class SerialReader : atmt::Subsystem {
