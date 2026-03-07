@@ -3,6 +3,7 @@
 
 #include <cmath>
 #include "../Automat/utils.h" // Printing
+#include "../Automat/utilities/Vector2.h"
 #include "../Constants.h"
 
 Drivetrain::Drivetrain():
@@ -42,7 +43,7 @@ void Drivetrain::periodic() {
 };
 
 void Drivetrain::setDrive(int x_power, int y_power, int r_power) {
-    atmt::Vector_2D vector{ atmt::Vector_2D(static_cast<double>(x_power), static_cast<double>(y_power)) };
+    atmt::Vector2 vector{ atmt::Vector2(static_cast<double>(x_power), static_cast<double>(y_power)) };
     if (m_gyro->isCalibrating()) {
 #ifdef AUTOMAT_VEX_ // DEBUG
         atmt::m_brain.Screen.print("Gyro Still Calibrating!");
