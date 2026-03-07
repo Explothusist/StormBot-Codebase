@@ -27,8 +27,14 @@ StormBot::~StormBot() {
     m_bot_cont = nullptr;
 };
 
+void StormBot::robotInit() {
+    atmt::platform_print("Robot Init!           ");
+};
 void StormBot::robotPeriodic() {
     atmt::platform_print("Robot Periodic...     ");
+};
+void StormBot::robotExit() {
+    atmt::platform_print("Robot Exit            ");
 };
 
 void StormBot::disabledInit() {

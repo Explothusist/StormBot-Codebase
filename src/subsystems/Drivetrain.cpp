@@ -16,7 +16,16 @@ Drivetrain::Drivetrain():
 
 };
 Drivetrain::~Drivetrain() {
-    
+    delete m_motor_bl;
+    m_motor_bl = nullptr;
+    delete m_motor_br;
+    m_motor_br = nullptr;
+    delete m_motor_fl;
+    m_motor_fl = nullptr;
+    delete m_motor_fr;
+    m_motor_fr = nullptr;
+    delete m_gyro;
+    m_gyro = nullptr;
 };
 
 void Drivetrain::init() {
