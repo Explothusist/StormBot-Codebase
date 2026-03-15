@@ -21,7 +21,7 @@ class RobotContainer {
         CameraReader* m_camera_reader;
 
         atmt::Joystick* m_driver_controller;
-        atmt::Joystick* m_operator_controller;
+        // atmt::Joystick* m_operator_controller;
     private:
 };
 

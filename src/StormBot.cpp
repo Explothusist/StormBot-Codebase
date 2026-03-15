@@ -17,7 +17,7 @@ StormBot::StormBot():
 
     // Add all Joysticks
     addJoystick(m_bot_cont->m_driver_controller);
-    addJoystick(m_bot_cont->m_operator_controller);
+    // addJoystick(m_bot_cont->m_operator_controller);
 
     // Configure bindings
     m_bot_cont->configure_bindings();
