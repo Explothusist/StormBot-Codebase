@@ -55,12 +55,12 @@ void TeleopDriveCommand::execute() {
 #endif
         }
     }else {
-        rotation = m_driver_controller->getRawAxis(atmt::RXAxis);
+        rotation = m_driver_controller->getRawAxis(atmt::RXAxis) * 100;
     }
 
     m_drivetrain->setDrive(
-        m_driver_controller->getRawAxis(atmt::LXAxis),
-        m_driver_controller->getRawAxis(atmt::LYAxis),
+        m_driver_controller->getRawAxis(atmt::LXAxis) * 100,
+        m_driver_controller->getRawAxis(atmt::LYAxis) * 100,
         rotation
     );
 };

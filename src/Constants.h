@@ -12,31 +12,31 @@ namespace constants {
     };
 
     namespace ports {
-        int const MotorBL_Port = vex::PORT1;
-        int const MotorBR_Port = vex::PORT11;
-        int const MotorFL_Port = vex::PORT10;
-        int const MotorFR_Port = vex::PORT20;
-        int const Gyro_Port = vex::PORT5;
+        int const MotorBL_Port = vex::PORT12;
+        int const MotorBR_Port = vex::PORT2;
+        int const MotorFL_Port = vex::PORT1;
+        int const MotorFR_Port = vex::PORT11;
+        int const Gyro_Port = vex::PORT13;
 
-        int const Serial_Port = vex::PORT2;
+        int const Serial_Port = vex::PORT20;
 
-        int const CameraFront_Port = vex::PORT6;
+        int const CameraFront_Port = vex::PORT19;
     }
 
     namespace drivetrain {
         double const Drivetrain_Speed = 1.0; // Percent
 
         double const RotationCorrect_Threshold = 1.0; // Degrees
-        double const RotationCorrect_MinSpeed = 0.03;
-        double const RotationCorrect_MaxSpeed = 0.4;
-        double const RotationCorrect_Range = 15.0; // Degrees
+        double const RotationCorrect_MinSpeed = 0.01;
+        double const RotationCorrect_MaxSpeed = 0.12;
+        double const RotationCorrect_Range = 30.0; // Degrees
 
         namespace align {
             double const Min_Speed_To_Move = 0.03; // Determine experimentally
 
-            double const Align_Max_Speed_LR = 0.30; // Gradient, Left/Right
+            double const Align_Max_Speed_LR = 0.20; // Gradient, Left/Right
             double const Align_Min_Speed_FB = Min_Speed_To_Move + 0.0;
-            double const Align_Max_Speed_FB = 0.30; // Gradient, Forward/Backward
+            double const Align_Max_Speed_FB = 0.20; // Gradient, Forward/Backward
 
             double const Align_Slow_At_Distance = 12.0; // in inches
 
