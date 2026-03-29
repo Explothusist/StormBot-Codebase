@@ -19,6 +19,10 @@ StormBot::StormBot():
     addJoystick(m_bot_cont->m_driver_controller);
     // addJoystick(m_bot_cont->m_operator_controller);
 
+    // Set up Autonomous
+    // setAutonomousCommand(m_bot_cont->getAutonomousCommand(0, m_bot_cont));
+    setAutonomousCommandGetter(RobotContainer::getAutonomousCommand, RobotContainer::getWhichAutonomousRoutine, m_bot_cont);
+
     // Configure bindings
     m_bot_cont->configure_bindings();
 };

@@ -13,9 +13,11 @@ class RobotContainer {
         RobotContainer();
         ~RobotContainer();
 
+        void configure_auto_triggers();
         void configure_bindings();
 
-        atmt::Command* getAutonomousCommand();
+        static atmt::Command* getAutonomousCommand(int indicator, void* robot_container);
+        static int getWhichAutonomousRoutine(void* robot_container);
 
         Drivetrain* m_drivetrain; // public because they are for Robot.cpp
         CameraReader* m_camera_reader;

@@ -18,11 +18,15 @@ RobotContainer::RobotContainer():
     m_camera_serial{ new atmt::SerialReader(constants::serial::SerialAddress, constants::serial::SerialCamerasPort) },
     m_esp_serial{ new atmt::SerialReader(constants::serial::SerialAddress, constants::serial::SerialEspPort) }
 {
-
+    
 };
 RobotContainer::~RobotContainer() { // Actually deleted by atmt::TimedRobot
 };
 
+
+void RobotContainer::configure_auto_triggers() {
+    m_driver_controller->bindAutoTrigger(new atmt::Trigger(atmt::AButton, atmt::ButtonPressed));
+};
 void RobotContainer::configure_bindings() {
     m_driver_controller->bindKey(
         (new atmt::Trigger(atmt::R1Button, atmt::ButtonPressed))->setType(atmt::WhileTrigger),
@@ -53,9 +57,20 @@ void RobotContainer::configure_bindings() {
     m_drivetrain->setDefaultCommand(new TeleopDriveCommand(m_drivetrain, m_driver_controller));
 };
 
-atmt::Command* RobotContainer::getAutonomousCommand() {
-    return new atmt::SequentialCommandGroup({
-        (new DriveCommand(m_drivetrain, 0.3, 0.0, 0.0))->withTimeout(2.0),
-        new ApproachAndAlign(m_drivetrain, m_camera_reader)
-    });
+atmt::Command* RobotContainer::getAutonomousCommand(int indicator, void* robot_container) {
+    RobotContainer* self = static_cast<RobotContainer*>(robot_container);
+    switch (indicator) {
+        case 0:
+            return new atmt::SequentialCommandGroup({
+                (new DriveCommand(self->m_drivetrain, 0.3, 0.0, 0.0))->withTimeout(2.0),
+                new ApproachAndAlign(self->m_drivetrain, self->m_camera_reader)
+            });
+        
+        default:
+            return new atmt::EmptyCommand();
+    }
+};
+static int getWhichAutonomousRoutine(void* robot_container) {
+    RobotContainer* self = static_cast<RobotContainer*>(robot_container);
+    return 0;
 };
