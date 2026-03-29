@@ -3,12 +3,19 @@
 #define STORMBOT_CONSTANTS_
 
 #include "vex.h"
+#include "storm_serial_utils.h"
 
 namespace constants {
 
     namespace robot {
         // int const AutonomousLength = 30; // Seconds
         int const AutonomousLength = 3; // Seconds
+    };
+
+    namespace serial {
+        int const SerialAddress = Address_VexBot;
+        int const SerialCamerasPort = vex::PORT15;
+        int const SerialEspPort = vex::PORT16;
     };
 
     namespace ports {

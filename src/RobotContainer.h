@@ -22,6 +22,8 @@ class RobotContainer {
 
         atmt::Joystick* m_driver_controller;
         // atmt::Joystick* m_operator_controller;
+        atmt::SerialReader* m_camera_serial;
+        atmt::SerialReader* m_esp_serial;
     private:
 };
 

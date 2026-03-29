@@ -44,7 +44,7 @@ CameraReader::CameraReader():
     // m_color_white{ vex::aivision::colordesc(1, 92, 92, 92, 180, 0.2) },
     // m_color_white{ vex::aivision::colordesc(1, 130, 107, 87, 20, 0.3) },
     m_color_white{ vex::aivision::colordesc(1, 176, 60, 29, 10, 0.2) },
-    m_camera_front{ nullptr }//,
+    m_vex_camera_scoring{ nullptr }//,
     // m_camera_front{ vex::aivision(constants::camera::CameraFront_Port, m_color_red, m_color_blue, m_color_white) }//,
 
     // m_camera_left{ vex::aivision(constants::camera::CameraLeft_Port, m_color_red, m_color_blue) },
@@ -60,12 +60,12 @@ CameraReader::CameraReader():
     // m_camera_right.tagDetection(true);
 };
 CameraReader::~CameraReader() {
-    delete m_camera_front;
-    m_camera_front = nullptr;
+    delete m_vex_camera_scoring;
+    m_vex_camera_scoring = nullptr;
 };
 
 void CameraReader::init() {
-    m_camera_front = new vex::aivision(constants::ports::CameraFront_Port, m_color_red, m_color_blue, m_color_white);
+    m_vex_camera_scoring = new vex::aivision(constants::ports::CameraFront_Port, m_color_red, m_color_blue, m_color_white);
 };
 void CameraReader::periodic() {
     BoundingBox* obj = getLargestBatteryFront();
@@ -108,10 +108,10 @@ vex::aivision::object* CameraReader::getLargestOfColors(vex::aivision* camera, v
 };
 
 BoundingBox* CameraReader::getLargestTagFront() {
-    m_camera_front->takeSnapshot(vex::aivision::ALL_TAGS);
+    m_vex_camera_scoring->takeSnapshot(vex::aivision::ALL_TAGS);
 
-    if (m_camera_front->objectCount > 0) {
-        vex::aivision::object obj = m_camera_front->largestObject;
+    if (m_vex_camera_scoring->objectCount > 0) {
+        vex::aivision::object obj = m_vex_camera_scoring->largestObject;
         BoundingBox* ret = new BoundingBox( // (0, 0) is center of grid
             obj.centerX - (constants::camera::Camera_Viewport_Width / 2),
             obj.centerY - (constants::camera::Camera_Viewport_Height / 2),
@@ -123,7 +123,7 @@ BoundingBox* CameraReader::getLargestTagFront() {
     return nullptr;
 };
 BoundingBox* CameraReader::getLargestScoringFront() {
-    vex::aivision::object* obj = getLargestOfColors(m_camera_front, m_color_blue, m_color_red);
+    vex::aivision::object* obj = getLargestOfColors(m_vex_camera_scoring, m_color_blue, m_color_red);
 
     if (obj != nullptr) {
         BoundingBox* ret = new BoundingBox( // (0, 0) is center of grid
@@ -139,10 +139,10 @@ BoundingBox* CameraReader::getLargestScoringFront() {
     return nullptr;
 };
 BoundingBox* CameraReader::getLargestBatteryFront() {
-    m_camera_front->takeSnapshot(m_color_white);
+    m_vex_camera_scoring->takeSnapshot(m_color_white);
 
-    if (m_camera_front->objectCount > 0) {
-        vex::aivision::object obj = m_camera_front->largestObject;
+    if (m_vex_camera_scoring->objectCount > 0) {
+        vex::aivision::object obj = m_vex_camera_scoring->largestObject;
         BoundingBox* ret = new BoundingBox( // (0, 0) is center of grid
             obj.centerX - (constants::camera::Camera_Viewport_Width / 2),
             obj.centerY - (constants::camera::Camera_Viewport_Height / 2),
@@ -152,4 +152,29 @@ BoundingBox* CameraReader::getLargestBatteryFront() {
         return ret;
     }
     return nullptr;
+};
+
+void CameraReader::updateTagDetection(TagCamera camera, TagDetection* detection) {
+    m_last_tags[camera].write(detection);
+};
+void CameraReader::requestTagUpdate(TagCamera camera, atmt::SerialReader* serial_reader) {
+    serial_reader->sendMessage(getCameraAddress(camera), static_cast<uint8_t>(Serial_GetLargestDetection), 1);
+};
+TagDetection* CameraReader::getLastTagDetection(TagCamera camera) {
+    return m_last_tags[camera].read();
+};
+
+uint8_t CameraReader::getCameraAddress(TagCamera camera) {
+    switch (camera) {
+        case TagCamera_Front:
+            return Address_Camera_1_Front;
+        case TagCamera_Right:
+            return Address_Camera_2_Right;
+        case TagCamera_Back:
+            return Address_Camera_3_Back;
+        case TagCamera_Left:
+            return Address_Camera_4_Left;
+        case TagCamera_Scoring:
+            return Address_Camera_5_Scoring;
+    }
 };
