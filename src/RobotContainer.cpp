@@ -15,8 +15,8 @@ RobotContainer::RobotContainer():
     m_camera_reader{ new CameraReader() },
     m_driver_controller{ new atmt::Joystick(atmt::PrimaryJoystick) },
     // m_operator_controller{ new atmt::Joystick(atmt::PartnerJoystick) }
-    m_camera_serial{ new atmt::SerialReader(constants::serial::SerialAddress, constants::serial::SerialCamerasPort) },
-    m_esp_serial{ new atmt::SerialReader(constants::serial::SerialAddress, constants::serial::SerialEspPort) }
+    m_camera_serial{ new atmt::SerialReader(constants::serial::SerialAddress, constants::ports::SerialCameras_Port) },
+    m_esp_serial{ new atmt::SerialReader(constants::serial::SerialAddress, constants::ports::SerialEsp_Port) }
 {
     
 };

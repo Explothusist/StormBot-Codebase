@@ -14,18 +14,19 @@ namespace constants {
 
     namespace serial {
         int const SerialAddress = Address_VexBot;
-        int const SerialCamerasPort = vex::PORT15;
-        int const SerialEspPort = vex::PORT16;
     };
 
     namespace ports {
-        int const MotorBL_Port = vex::PORT12;
-        int const MotorBR_Port = vex::PORT2;
-        int const MotorFL_Port = vex::PORT1;
-        int const MotorFR_Port = vex::PORT11;
-        int const Gyro_Port = vex::PORT13;
+        int const MotorBL_Port = vex::PORT2;
+        int const MotorBR_Port = vex::PORT20;
+        int const MotorFL_Port = vex::PORT10;
+        int const MotorFR_Port = vex::PORT1;
+        int const Gyro_Port = vex::PORT3;
+        
+        int const Wheel_Port = vex::PORT4;
 
-        int const Serial_Port = vex::PORT20;
+        int const SerialCameras_Port = vex::PORT15;
+        int const SerialEsp_Port = vex::PORT16;
 
         int const CameraFront_Port = vex::PORT19;
     }
@@ -34,8 +35,8 @@ namespace constants {
         double const Drivetrain_Speed = 1.0; // Percent
 
         double const RotationCorrect_Threshold = 1.0; // Degrees
-        double const RotationCorrect_MinSpeed = 0.01;
-        double const RotationCorrect_MaxSpeed = 0.12;
+        double const RotationCorrect_MinSpeed = 0.02;
+        double const RotationCorrect_MaxSpeed = 0.18;
         double const RotationCorrect_Range = 30.0; // Degrees
 
         namespace align {

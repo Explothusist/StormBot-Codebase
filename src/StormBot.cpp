@@ -24,6 +24,7 @@ StormBot::StormBot():
     setAutonomousCommandGetter(RobotContainer::getAutonomousCommand, RobotContainer::getWhichAutonomousRoutine, m_bot_cont);
 
     // Configure bindings
+    m_bot_cont->configure_auto_triggers();
     m_bot_cont->configure_bindings();
 };
 StormBot::~StormBot() {
