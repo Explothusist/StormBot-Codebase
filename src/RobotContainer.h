@@ -2,6 +2,8 @@
 #ifndef STORMBOT_CONTAINER_
 #define STORMBOT_CONTAINER_
 
+#include "stormbot_type.h"
+
 #include "Automat/automat.h"
 #include "Constants.h"
 
@@ -26,6 +28,10 @@ class RobotContainer {
         // atmt::Joystick* m_operator_controller;
         atmt::SerialReader* m_camera_serial;
         atmt::SerialReader* m_esp_serial;
+        
+#ifdef STORMBOT_STATE_MATCHED_
+        atmt::Heartbeat_StateMatcher* m_heartbeat;
+#endif
     private:
 };
 

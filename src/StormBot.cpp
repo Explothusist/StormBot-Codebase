@@ -31,6 +31,10 @@ void StormBot::environmentInit() {
     // setAutonomousCommand(m_bot_cont->getAutonomousCommand(0, m_bot_cont));
     setAutonomousCommandGetter(RobotContainer::getAutonomousCommand, RobotContainer::getWhichAutonomousRoutine, m_bot_cont);
 
+#ifdef STORMBOT_STATE_MATCHED_
+    addHeartbeat(m_bot_cont->m_heartbeat);
+#endif
+
     // Configure bindings
     m_bot_cont->configure_auto_triggers();
     m_bot_cont->configure_bindings();

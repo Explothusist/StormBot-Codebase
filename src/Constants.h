@@ -91,6 +91,10 @@ namespace constants {
         int const Serial_Baudrate = 115200;
     };
 
+    namespace heartbeat {
+        int const TimeoutMS = 750;
+    };
+
 };
 
 #endif
