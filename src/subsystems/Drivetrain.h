@@ -11,7 +11,10 @@ class Drivetrain : public atmt::Subsystem {
         ~Drivetrain() override;
 
         void init() override;
-        void periodic() override;
+        void systemPeriodic() override;
+        void disabledPeriodic() override;
+        void autonomousPeriodic() override;
+        void teleopPeriodic() override;
 
         void setDrive(int x_power, int y_power, int r_power);
         void stopDrive();

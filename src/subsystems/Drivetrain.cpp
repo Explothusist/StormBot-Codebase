@@ -38,9 +38,12 @@ void Drivetrain::init() {
 
     m_gyro->calibrate();
 };
-void Drivetrain::periodic() {
+void Drivetrain::systemPeriodic() {
 
 };
+void Drivetrain::disabledPeriodic() {};
+void Drivetrain::autonomousPeriodic() {};
+void Drivetrain::teleopPeriodic() {};
 
 void Drivetrain::setDrive(int x_power, int y_power, int r_power) {
     atmt::Vector2 vector{ atmt::Vector2(static_cast<double>(x_power), static_cast<double>(y_power)) };

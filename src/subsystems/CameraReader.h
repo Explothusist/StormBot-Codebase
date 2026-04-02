@@ -19,13 +19,17 @@ class BoundingBox {
         BoundingBox(int center_x, int center_y, int width, int height);
         ~BoundingBox();
 
-        double getApproxDistance(int actual_width, int actual_height); // Returns in inches
-
         int m_center_x;
         int m_center_y;
         int m_width;
         int m_height;
 };
+
+double getApproxDistance(int apparent_width, int apparent_height, int actual_width, int actual_height); // Returns in inches
+double getApproxDistance(BoundingBox* bounding, int actual_width, int actual_height); // Returns in inches
+double getApproxDistance(TagDetection* tag, int actual_width, int actual_height); // Returns in inches
+
+
 
 class CameraReader : public atmt::Subsystem {
     public:
@@ -33,7 +37,10 @@ class CameraReader : public atmt::Subsystem {
         ~CameraReader() override;
 
         void init() override;
-        void periodic() override;
+        void systemPeriodic() override;
+        void disabledPeriodic() override;
+        void autonomousPeriodic() override;
+        void teleopPeriodic() override;
 
         vex::aivision::object* getLargestOfColors(vex::aivision* camera, vex::aivision::colordesc color1, vex::aivision::colordesc color2);
 
@@ -43,7 +50,7 @@ class CameraReader : public atmt::Subsystem {
 
         void updateTagDetection(TagCamera camera, TagDetection* detection);
         void requestTagUpdate(TagCamera camera, atmt::SerialReader* serial_reader);
-        TagDetection* getLastTagDetection(TagCamera camera);
+        TagDetection* getLastTagDetection(TagCamera camera, int max_age_ms = 200);
 
         uint8_t getCameraAddress(TagCamera camera);
 
@@ -58,6 +65,7 @@ class CameraReader : public atmt::Subsystem {
         // vex::aivision m_camera_right;
 
         atmt::ThreadsafeBuffer<TagDetection*> m_last_tags[5];
+        atmt::ThreadsafeBuffer<atmt::Timestamp> m_last_tag_timestamp[5];
 };
 
 #endif

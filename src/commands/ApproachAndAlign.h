@@ -8,7 +8,7 @@
 
 class ApproachAndAlign : public atmt::Command {
     public:
-        ApproachAndAlign(Drivetrain* drivetrain, CameraReader* cameras); // Put subsystems as parameters
+        ApproachAndAlign(Drivetrain* drivetrain, CameraReader* cameras, atmt::SerialReader* serial); // Put subsystems as parameters
         ApproachAndAlign(ApproachAndAlign& command); // Copy constructor
         ~ApproachAndAlign();
         atmt::Command* clone() const override;
@@ -21,6 +21,7 @@ class ApproachAndAlign : public atmt::Command {
     private:
         Drivetrain* m_drivetrain;
         CameraReader* m_cameras;
+        atmt::SerialReader* m_serial;
 
         int m_check_dist_counter;
         double m_last_dist;

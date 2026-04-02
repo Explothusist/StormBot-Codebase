@@ -83,6 +83,7 @@ namespace constants {
         double const Battery_Actual_Height = 6.0; // In inches
 
         double const ColorRect_Insignificant = 20; // In camera pixels
+        double const AprilTag_Insignificant = 10; // In camera pixels
         double const Battery_Insignificant = 20; // In camera pixels
     };
 

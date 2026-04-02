@@ -20,9 +20,9 @@ BoundingBox::~BoundingBox() {
 
 };
 
-double BoundingBox::getApproxDistance(int actual_width, int actual_height) {
-    double width_ratio = static_cast<double>(m_width) / static_cast<double>(constants::camera::Camera_Viewport_Width); // Pixels/Pixels = Percentage
-    double height_ratio = static_cast<double>(m_height) / static_cast<double>(constants::camera::Camera_Viewport_Height); // Percent of Viewport
+double getApproxDistance(int apparent_width, int apparent_height, int actual_width, int actual_height) {
+    double width_ratio = static_cast<double>(apparent_width) / static_cast<double>(constants::camera::Camera_Viewport_Width); // Pixels/Pixels = Percentage
+    double height_ratio = static_cast<double>(apparent_height) / static_cast<double>(constants::camera::Camera_Viewport_Height); // Percent of Viewport
 
     width_ratio *= constants::camera::Camera_FOV_Horizontal / 360; // Percentage * Percentage = Percentage
     height_ratio *= constants::camera::Camera_FOV_Vertical / 360; // Percent of Circle
@@ -34,6 +34,12 @@ double BoundingBox::getApproxDistance(int actual_width, int actual_height) {
     double distance_h = static_cast<double>(actual_height) / height_ratio; // Inches of Distance
 
     return (distance_w + distance_h) / 2.0; // Average of two metrics
+};
+double getApproxDistance(BoundingBox* bounding, int actual_width, int actual_height) {
+    return getApproxDistance(bounding->m_width, bounding->m_height, actual_width, actual_height);
+};
+double getApproxDistance(TagDetection* tag, int actual_width, int actual_height) {
+    return getApproxDistance(tag->bounding_width, tag->bounding_height, actual_width, actual_height);
 };
 
 CameraReader::CameraReader():
@@ -67,7 +73,7 @@ CameraReader::~CameraReader() {
 void CameraReader::init() {
     m_vex_camera_scoring = new vex::aivision(constants::ports::CameraFront_Port, m_color_red, m_color_blue, m_color_white);
 };
-void CameraReader::periodic() {
+void CameraReader::systemPeriodic() {
     BoundingBox* obj = getLargestBatteryFront();
     if (obj != nullptr) {
 #ifdef AUTOMAT_VEX_ // DEBUG
@@ -75,6 +81,9 @@ void CameraReader::periodic() {
 #endif
     }
 };
+void CameraReader::disabledPeriodic() {};
+void CameraReader::autonomousPeriodic() {};
+void CameraReader::teleopPeriodic() {};
 
 vex::aivision::object* CameraReader::getLargestOfColors(vex::aivision* camera, vex::aivision::colordesc color1, vex::aivision::colordesc color2) {
     vex::aivision::object* obj1{ nullptr };
@@ -156,12 +165,17 @@ BoundingBox* CameraReader::getLargestBatteryFront() {
 
 void CameraReader::updateTagDetection(TagCamera camera, TagDetection* detection) {
     m_last_tags[camera].write(detection);
+    m_last_tag_timestamp[camera].write(atmt::getSystemTime());
 };
 void CameraReader::requestTagUpdate(TagCamera camera, atmt::SerialReader* serial_reader) {
     serial_reader->sendMessage(getCameraAddress(camera), static_cast<uint8_t>(Serial_GetLargestDetection), 1);
 };
-TagDetection* CameraReader::getLastTagDetection(TagCamera camera) {
-    return m_last_tags[camera].read();
+TagDetection* CameraReader::getLastTagDetection(TagCamera camera, int max_age_ms) {
+    if (atmt::getSystemTime().getTimeDifferenceMS(m_last_tag_timestamp[camera].read())) {
+        return m_last_tags[camera].read();
+    }else {
+        return nullptr;
+    }
 };
 
 uint8_t CameraReader::getCameraAddress(TagCamera camera) {

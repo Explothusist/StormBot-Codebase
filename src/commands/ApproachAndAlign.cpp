@@ -6,15 +6,17 @@
 #include "../Automat/utils.h"
 #include "../Constants.h"
 
-ApproachAndAlign::ApproachAndAlign(Drivetrain* drivetrain, CameraReader* cameras):
+ApproachAndAlign::ApproachAndAlign(Drivetrain* drivetrain, CameraReader* cameras, atmt::SerialReader* serial):
     atmt::Command(),
     m_drivetrain{ drivetrain },
     m_cameras{ cameras },
+    m_serial{ serial },
     m_check_dist_counter{ 0 },
     m_last_dist{ -1 },
     m_invisibility_count{ 0 }
 {
     usesSubsystem(m_drivetrain);
+    usesSubsystem(m_cameras);
 };
 ApproachAndAlign::ApproachAndAlign(ApproachAndAlign& command):
     atmt::Command(command)
@@ -26,19 +28,26 @@ ApproachAndAlign::~ApproachAndAlign() {
     // Will run ~Command() after this is complete
 };
 atmt::Command* ApproachAndAlign::clone() const {
-    return new ApproachAndAlign(m_drivetrain, m_cameras);
+    return new ApproachAndAlign(m_drivetrain, m_cameras, m_serial);
 };
 
 void ApproachAndAlign::initialize() {
 
 };
 void ApproachAndAlign::execute() {
-    BoundingBox* object = m_cameras->getLargestScoringFront(); // TODO: Read multiple cameras 
+    m_cameras->requestTagUpdate(TagCamera_Front, m_serial);
+    TagDetection* object = m_cameras->getLastTagDetection(TagCamera_Front);
+    // BoundingBox* object = m_cameras->getLargestScoringFront(); // TODO: Read multiple cameras 
 
+    // if (
+    //     object != nullptr && 
+    //     object->m_width >= constants::camera::ColorRect_Insignificant && 
+    //     object->m_height >= constants::camera::ColorRect_Insignificant
+    // ) {
     if (
         object != nullptr && 
-        object->m_width >= constants::camera::ColorRect_Insignificant && 
-        object->m_height >= constants::camera::ColorRect_Insignificant
+        object->bounding_width >= constants::camera::AprilTag_Insignificant && 
+        object->bounding_height >= constants::camera::AprilTag_Insignificant
     ) {
         m_invisibility_count = 0;
         if (
@@ -47,9 +56,9 @@ void ApproachAndAlign::execute() {
             (m_last_dist <= constants::drivetrain::align::Align_Slow_At_Distance && m_check_dist_counter > 5) || 
             (m_last_dist <= constants::drivetrain::align::Align_Slow_At_Distance/2 && m_check_dist_counter > 2)
         ) { // Check with more frequency as we get closer (because checking costs time)
-            m_last_dist = object->getApproxDistance(constants::camera::ColorRect_Actual_Width, constants::camera::ColorRect_Actual_Height);
+            m_last_dist = getApproxDistance(object, constants::camera::ColorRect_Actual_Width, constants::camera::ColorRect_Actual_Height);
         }
-        m_last_offset = object->m_center_x;
+        m_last_offset = object->x;
 
         // int min_speed = object->m_center_x >= 0 ? constants::drivetrain::align::Min_Speed_To_Move : -constants::drivetrain::align::Min_Speed_To_Move;
         // double obj_percent_pos = static_cast<double>(object->m_center_x) / static_cast<double>(constants::camera::Camera_Viewport_Width);
@@ -58,7 +67,7 @@ void ApproachAndAlign::execute() {
         // double drive_lr = min_speed + (obj_percent_pos * bonus_speed); // in percentage
 
         double drive_lr = atmt::getProportional(
-            object->m_center_x, 
+            object->x, 
             0.0, 
             constants::camera::Camera_Viewport_Width, 
             constants::drivetrain::align::Min_Speed_To_Move, 
@@ -84,7 +93,7 @@ void ApproachAndAlign::execute() {
             static_cast<int>(std::round(drive_fb * 100.0)),
             0
         );
-        delete object; // free BoundingBox returned by CameraReader
+        // delete object; // free BoundingBox returned by CameraReader
     }else {
         m_invisibility_count += 1;
         m_drivetrain->stopDrive();

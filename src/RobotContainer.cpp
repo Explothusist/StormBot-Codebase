@@ -32,7 +32,12 @@ void RobotContainer::configure_bindings() {
         (new atmt::Trigger(atmt::R1Button, atmt::ButtonPressed))->setType(atmt::WhileTrigger),
         new AlignAndPounce(m_drivetrain, m_camera_reader)
     );
+    m_driver_controller->bindKey(
+        (new atmt::Trigger(atmt::L1Button, atmt::ButtonPressed))->setType(atmt::WhileTrigger),
+        new ApproachAndAlign(m_drivetrain, m_camera_reader, m_camera_serial)
+    );
 
+    // Serial
     m_camera_serial->bindToMessage(
         (new atmt::Trigger(atmt::SerialReceive, Serial_IsSingleDetection))->allowPartial()->fromSender(Address_Camera_1_Front),
         new UpdateApriltag(m_camera_serial, m_camera_reader, TagCamera_Front)
@@ -54,6 +59,7 @@ void RobotContainer::configure_bindings() {
         new UpdateApriltag(m_camera_serial, m_camera_reader, TagCamera_Scoring)
     );
     
+    // Default Commands
     m_drivetrain->setDefaultCommand(new TeleopDriveCommand(m_drivetrain, m_driver_controller));
 };
 
@@ -61,9 +67,12 @@ atmt::Command* RobotContainer::getAutonomousCommand(int indicator, void* robot_c
     RobotContainer* self = static_cast<RobotContainer*>(robot_container);
     switch (indicator) {
         case 0:
+            return new atmt::EmptyCommand();
+
+        case 1:
             return new atmt::SequentialCommandGroup({
                 (new DriveCommand(self->m_drivetrain, 0.3, 0.0, 0.0))->withTimeout(2.0),
-                new ApproachAndAlign(self->m_drivetrain, self->m_camera_reader)
+                new ApproachAndAlign(self->m_drivetrain, self->m_camera_reader, self->m_camera_serial)
             });
         
         default:

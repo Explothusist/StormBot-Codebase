@@ -9,6 +9,14 @@ StormBot::StormBot():
     atmt::TimedRobot(constants::robot::AutonomousLength),
     m_bot_cont{ new RobotContainer() }
 {
+
+};
+StormBot::~StormBot() {
+    delete m_bot_cont;
+    m_bot_cont = nullptr;
+};
+
+void StormBot::environmentInit() {
     setUsesCompetition(false); // VEX-specific, must be set before startLoop()
 
     // Register all Subsystems
@@ -26,10 +34,6 @@ StormBot::StormBot():
     // Configure bindings
     m_bot_cont->configure_auto_triggers();
     m_bot_cont->configure_bindings();
-};
-StormBot::~StormBot() {
-    delete m_bot_cont;
-    m_bot_cont = nullptr;
 };
 
 void StormBot::robotInit() {
