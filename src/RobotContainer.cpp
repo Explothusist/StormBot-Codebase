@@ -9,11 +9,17 @@
 #include "commands/ApproachAndAlign.h"
 #include "commands/AlignAndPounce.h"
 #include "commands/UpdateApriltag.h"
+#include "commands/UpdateJoystick.h"
 
 RobotContainer::RobotContainer():
     m_drivetrain{ new Drivetrain() },
     m_camera_reader{ new CameraReader() },
-    m_driver_controller{ new atmt::Joystick(atmt::PrimaryJoystick) },
+#ifdef STORMBOT_USE_VEX_CONTROLLER_
+    m_driver_controller{ new atmt::Joystick(atmt::PollMode_Continuous, atmt::PrimaryJoystick) },
+#endif
+#ifdef STORMBOT_USE_SERIAL_ESP_CONTROLLER_
+    m_driver_controller{ new atmt::Joystick(atmt::PollMode_Manual) },
+#endif
     // m_operator_controller{ new atmt::Joystick(atmt::PartnerJoystick) }
     m_camera_serial{ new atmt::SerialReader(constants::serial::SerialAddress, constants::ports::SerialCameras_Port) },
     m_esp_serial{ new atmt::SerialReader(constants::serial::SerialAddress, constants::ports::SerialEsp_Port) }
@@ -61,6 +67,13 @@ void RobotContainer::configure_bindings() {
         (new atmt::Trigger(atmt::SerialReceive, Serial_IsSingleDetection))->allowPartial()->fromSender(Address_Camera_5_Scoring),
         new UpdateApriltag(m_camera_serial, m_camera_reader, TagCamera_Scoring)
     );
+    
+#ifdef STORMBOT_USE_SERIAL_ESP_CONTROLLER_
+    m_esp_serial->bindToMessage(
+        (new atmt::Trigger(atmt::SerialReceive, Serial_JoystickPacket))->allowPartial()->fromSender(Address_EspBot),
+        new UpdateApriltag(m_camera_serial, m_camera_reader, TagCamera_Scoring)
+    );
+#endif
     
     // Default Commands
     m_drivetrain->setDefaultCommand(new TeleopDriveCommand(m_drivetrain, m_driver_controller));

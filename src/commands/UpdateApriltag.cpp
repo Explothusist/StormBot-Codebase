@@ -31,7 +31,7 @@ void UpdateApriltag::initialize() {
     uint8_t prefix;
     uint8_t message[atmt::kMaxPacketSize];
     uint8_t length;
-    bool success = m_serial->popNextMessagePrefixed(prefix, message, length);
+    bool success = m_serial->popMessagePrefixed(getSerialMessageId(), prefix, message, length);
     if (!success || length != sizeof(TagDetection)) {
         return;
     }
