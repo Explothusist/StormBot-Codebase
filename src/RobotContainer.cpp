@@ -96,6 +96,6 @@ atmt::Command* RobotContainer::getAutonomousCommand(int indicator, void* robot_c
     }
 };
 int RobotContainer::getWhichAutonomousRoutine(void* robot_container) {
-    RobotContainer* self = static_cast<RobotContainer*>(robot_container);
+    // RobotContainer* self = static_cast<RobotContainer*>(robot_container);
     return 0;
 };

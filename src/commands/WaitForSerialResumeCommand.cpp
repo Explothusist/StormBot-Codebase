@@ -6,8 +6,8 @@
 WaitForSerialResumeCommand::WaitForSerialResumeCommand(atmt::SerialReader* serial): // Side to side movements
     atmt::Command(),
     m_serial{ serial },
-    m_resume_triggered{ false },
-    m_last_seen_id{ 0 }
+    m_last_seen_id{ 0 },
+    m_resume_triggered{ false }
 {
     
 };

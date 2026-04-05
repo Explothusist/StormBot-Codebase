@@ -3,7 +3,7 @@
 #define STORMBOT_SendSerialResumeCommand_
 
 #include "../Automat/automat.h"
-#include "storm_serial_utils.h"
+#include "../storm_serial_utils.h"
 
 class SendSerialResumeCommand : public atmt::Command { // Add more functionality to this, but this is a basic framework
     public:
