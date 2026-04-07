@@ -10,7 +10,7 @@ class UpdateApriltag : public atmt::Command {
         UpdateApriltag(atmt::SerialReader* serial, CameraReader* camera_reader, TagCamera camera); // Put subsystems as parameters
         UpdateApriltag(UpdateApriltag& command); // Copy constructor
         ~UpdateApriltag();
-        atmt::Command* clone() const override;
+        atmt::Command* cloneSelf() const override;
 
         void initialize() override; // User-made
         void execute() override; // User-made

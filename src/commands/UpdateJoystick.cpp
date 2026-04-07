@@ -21,7 +21,7 @@ UpdateJoystick::UpdateJoystick(UpdateJoystick& command):
 UpdateJoystick::~UpdateJoystick() {
     // Will run ~Command() after this is complete
 };
-atmt::Command* UpdateJoystick::clone() const {
+atmt::Command* UpdateJoystick::cloneSelf() const {
     return new UpdateJoystick(m_serial, m_controller);
 };
 

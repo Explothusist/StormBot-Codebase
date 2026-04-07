@@ -10,7 +10,7 @@ class DriveCommand : public atmt::Command {
         DriveCommand(Drivetrain* drivetrain, double x_power, double y_power, double r_power); // Put subsystems as parameters
         DriveCommand(DriveCommand& command); // Copy constructor
         ~DriveCommand();
-        atmt::Command* clone() const override;
+        atmt::Command* cloneSelf() const override;
 
         void initialize() override; // User-made
         void execute() override; // User-made

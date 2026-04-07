@@ -23,7 +23,7 @@ UpdateApriltag::UpdateApriltag(UpdateApriltag& command):
 UpdateApriltag::~UpdateApriltag() {
     // Will run ~Command() after this is complete
 };
-atmt::Command* UpdateApriltag::clone() const {
+atmt::Command* UpdateApriltag::cloneSelf() const {
     return new UpdateApriltag(m_serial, m_camera_reader, m_tag_camera);
 };
 

@@ -11,7 +11,7 @@ class ApproachAndAlign : public atmt::Command {
         ApproachAndAlign(Drivetrain* drivetrain, CameraReader* cameras, atmt::SerialReader* serial); // Put subsystems as parameters
         ApproachAndAlign(ApproachAndAlign& command); // Copy constructor
         ~ApproachAndAlign();
-        atmt::Command* clone() const override;
+        atmt::Command* cloneSelf() const override;
 
         void initialize() override; // User-made
         void execute() override; // User-made

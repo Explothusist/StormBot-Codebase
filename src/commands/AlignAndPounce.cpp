@@ -24,7 +24,7 @@ AlignAndPounce::AlignAndPounce(AlignAndPounce& command):
 AlignAndPounce::~AlignAndPounce() {
     // Will run ~Command() after this is complete
 };
-atmt::Command* AlignAndPounce::clone() const {
+atmt::Command* AlignAndPounce::cloneSelf() const {
     return new AlignAndPounce(m_drivetrain, m_cameras);
 };
 

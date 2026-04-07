@@ -11,7 +11,7 @@ class AlignAndPounce : public atmt::Command {
         AlignAndPounce(Drivetrain* drivetrain, CameraReader* cameras); // Put subsystems as parameters
         AlignAndPounce(AlignAndPounce& command); // Copy constructor
         ~AlignAndPounce();
-        atmt::Command* clone() const override;
+        atmt::Command* cloneSelf() const override;
 
         void initialize() override; // User-made
         void execute() override; // User-made
