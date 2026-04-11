@@ -1,16 +1,16 @@
 
-#ifndef STORMBOT_APPROACH_AND_ALIGN_
-#define STORMBOT_APPROACH_AND_ALIGN_
+#ifndef STORMBOT_ALIGN_AND_POUNCE_
+#define STORMBOT_ALIGN_AND_POUNCE_
 
 #include "../Automat/command_based/Command.h"
 #include "../subsystems/Drivetrain.h"
 #include "../subsystems/CameraReader.h"
 
-class ApproachAndAlign : public atmt::Command {
+class ColorRectGamePieceTargetting : public atmt::Command {
     public:
-        ApproachAndAlign(Drivetrain* drivetrain, CameraReader* cameras, atmt::SerialReader* serial); // Put subsystems as parameters
-        ApproachAndAlign(ApproachAndAlign& command); // Copy constructor
-        ~ApproachAndAlign();
+        ColorRectGamePieceTargetting(Drivetrain* drivetrain, CameraReader* cameras, atmt::SerialReader* serial); // Put subsystems as parameters
+        ColorRectGamePieceTargetting(ColorRectGamePieceTargetting& command); // Copy constructor
+        ~ColorRectGamePieceTargetting();
         atmt::Command* cloneSelf() const override;
 
         void initialize() override; // User-made

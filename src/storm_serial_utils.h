@@ -9,6 +9,7 @@
 */
 
 #include <cstdint>
+#include <string>
 
 struct __attribute__((packed)) TagDetection {
     int32_t id;
@@ -34,7 +35,9 @@ enum SerialIndicators {
 
     Serial_Heartbeat = 0x10,
     Serial_JoystickPacket = 0x11,
-    Serial_AutonomousResume = 0x12
+    Serial_AutonomousResume = 0x12,
+
+    Serial_ConnectToNetwork = 0xE0
 };
 
 enum SerialAddresses {
@@ -44,7 +47,15 @@ enum SerialAddresses {
     Address_Camera_2_Right = 0x06,
     Address_Camera_3_Back = 0x07,
     Address_Camera_4_Left = 0x08,
-    Address_Camera_5_Scoring = 0x09
+    Address_Camera_5_Scoring = 0x09,
+
+    Address_StreamingCameras = 0xE0,
+};
+
+enum NetworkIndicator {
+    Network_Competition = 0x00,
+    Network_Pit = 0x01//,
+    // Network_Hotspot = 0x02
 };
 
 #endif

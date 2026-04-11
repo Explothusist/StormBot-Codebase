@@ -28,6 +28,7 @@ atmt::Command* UpdateApriltag::cloneSelf() const {
 };
 
 void UpdateApriltag::initialize() {
+    atmt::platform_println("Apriltag Update Recieved");
     uint8_t prefix;
     uint8_t message[atmt::kMaxPacketSize];
     uint8_t length;

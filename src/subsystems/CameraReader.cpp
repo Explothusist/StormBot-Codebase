@@ -46,10 +46,10 @@ CameraReader::CameraReader():
     atmt::Subsystem(),
     m_color_red{ vex::aivision::colordesc(1, 255, 0, 0, 20, 0.2) },
     m_color_blue{ vex::aivision::colordesc(1, 0, 0, 255, 20, 0.2) },
-    // m_color_white{ vex::aivision::colordesc(1, 255, 255, 255, 180, 0.2) },
+    m_color_white{ vex::aivision::colordesc(1, 255, 255, 255, 10, 0.2) },
     // m_color_white{ vex::aivision::colordesc(1, 92, 92, 92, 180, 0.2) },
     // m_color_white{ vex::aivision::colordesc(1, 130, 107, 87, 20, 0.3) },
-    m_color_white{ vex::aivision::colordesc(1, 176, 60, 29, 10, 0.2) },
+    // m_color_white{ vex::aivision::colordesc(1, 176, 60, 29, 10, 0.2) }, // Bright Orange
     m_vex_camera_scoring{ nullptr }//,
     // m_camera_front{ vex::aivision(constants::camera::CameraFront_Port, m_color_red, m_color_blue, m_color_white) }//,
 
@@ -168,9 +168,11 @@ void CameraReader::updateTagDetection(TagCamera camera, TagDetection* detection)
     m_last_tag_timestamp[camera].write(atmt::getSystemTime());
 };
 void CameraReader::requestTagUpdate(TagCamera camera, atmt::SerialReader* serial_reader) {
+    atmt::platform_println("Requesting Tag Update");
     serial_reader->sendMessage(getCameraAddress(camera), static_cast<uint8_t>(Serial_GetLargestDetection), 1);
 };
 TagDetection* CameraReader::getLastTagDetection(TagCamera camera, int max_age_ms) {
+    atmt::platform_println("Grabbing Last Tag");
     if (atmt::getSystemTime().getTimeDifferenceMS(m_last_tag_timestamp[camera].read())) {
         return m_last_tags[camera].read();
     }else {

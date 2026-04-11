@@ -1,12 +1,12 @@
 
-#include "ApproachAndAlign.h"
+#include "AprilTagAlign.h"
 
 #include <cmath>
 
 #include "../Automat/utils.h"
 #include "../Constants.h"
 
-ApproachAndAlign::ApproachAndAlign(Drivetrain* drivetrain, CameraReader* cameras, atmt::SerialReader* serial):
+AprilTagAlign::AprilTagAlign(Drivetrain* drivetrain, CameraReader* cameras, atmt::SerialReader* serial):
     atmt::Command(),
     m_drivetrain{ drivetrain },
     m_cameras{ cameras },
@@ -18,23 +18,23 @@ ApproachAndAlign::ApproachAndAlign(Drivetrain* drivetrain, CameraReader* cameras
     usesSubsystem(m_drivetrain);
     usesSubsystem(m_cameras);
 };
-ApproachAndAlign::ApproachAndAlign(ApproachAndAlign& command):
+AprilTagAlign::AprilTagAlign(AprilTagAlign& command):
     atmt::Command(command)
 {
     m_drivetrain = command.m_drivetrain;
     m_cameras = command.m_cameras;
 };
-ApproachAndAlign::~ApproachAndAlign() {
+AprilTagAlign::~AprilTagAlign() {
     // Will run ~Command() after this is complete
 };
-atmt::Command* ApproachAndAlign::cloneSelf() const {
-    return new ApproachAndAlign(m_drivetrain, m_cameras, m_serial);
+atmt::Command* AprilTagAlign::cloneSelf() const {
+    return new AprilTagAlign(m_drivetrain, m_cameras, m_serial);
 };
 
-void ApproachAndAlign::initialize() {
+void AprilTagAlign::initialize() {
 
 };
-void ApproachAndAlign::execute() {
+void AprilTagAlign::execute() {
     m_cameras->requestTagUpdate(TagCamera_Front, m_serial);
     TagDetection* object = m_cameras->getLastTagDetection(TagCamera_Front);
     // BoundingBox* object = m_cameras->getLargestScoringFront(); // TODO: Read multiple cameras 
@@ -99,10 +99,10 @@ void ApproachAndAlign::execute() {
         m_drivetrain->stopDrive();
     }
 };
-void ApproachAndAlign::end(bool interrupted) {
+void AprilTagAlign::end(bool interrupted) {
     m_drivetrain->stopDrive();
 };
-bool ApproachAndAlign::is_finished() {
+bool AprilTagAlign::is_finished() {
     return 
         (std::abs(m_last_dist) < constants::drivetrain::align::Align_Epsilon_FB && std::abs(m_last_offset) < constants::drivetrain::align::Align_Epsilon_LR) ||
         (m_invisibility_count > 20);

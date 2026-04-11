@@ -6,10 +6,11 @@
 
 #include "commands/DriveCommand.h"
 #include "commands/TeleopDriveCommand.h"
-#include "commands/ApproachAndAlign.h"
-#include "commands/AlignAndPounce.h"
+#include "commands/AprilTagAlign.h"
+#include "commands/ColorRectGamePieceTargetting.h"
 #include "commands/UpdateApriltag.h"
-#include "commands/UpdateJoystick.h"
+#include "commands/SendSerialResumeCommand.h"
+#include "commands/WaitForSerialResumeCommand.h"
 
 RobotContainer::RobotContainer():
     m_drivetrain{ new Drivetrain() },
@@ -21,7 +22,8 @@ RobotContainer::RobotContainer():
     m_driver_controller{ new atmt::Joystick(atmt::PollMode_Manual) },
 #endif
     // m_operator_controller{ new atmt::Joystick(atmt::PartnerJoystick) }
-    m_camera_serial{ new atmt::SerialReader(constants::serial::SerialAddress, constants::ports::SerialCameras_Port) },
+    // m_camera_serial{ new atmt::SerialReader(constants::serial::SerialAddress, constants::ports::SerialCameras_Port) },
+    m_camera_serial{ new atmt::SerialReader(constants::serial::SerialAddress, 14) },
     // m_esp_serial{ new atmt::SerialReader(constants::serial::SerialAddress, constants::ports::SerialEsp_Port) }
     m_esp_serial{ new atmt::SerialReader(constants::serial::SerialAddress, 15) }
 #ifdef STORMBOT_STATE_MATCHED_
@@ -40,11 +42,15 @@ void RobotContainer::configure_auto_triggers() {
 void RobotContainer::configure_bindings() {
     m_driver_controller->bindKey(
         (new atmt::Trigger(atmt::R1Button, atmt::ButtonPressed))->setType(atmt::WhileTrigger),
-        new AlignAndPounce(m_drivetrain, m_camera_reader)
+        new ColorRectGamePieceTargetting(m_drivetrain, m_camera_reader, m_camera_serial)
+    );
+    m_driver_controller->bindKey(
+        (new atmt::Trigger(atmt::AButton, atmt::ButtonPressed))->setType(atmt::WhileTrigger),
+        new ColorRectGamePieceTargetting(m_drivetrain, m_camera_reader, m_camera_serial)
     );
     m_driver_controller->bindKey(
         (new atmt::Trigger(atmt::L1Button, atmt::ButtonPressed))->setType(atmt::WhileTrigger),
-        new ApproachAndAlign(m_drivetrain, m_camera_reader, m_camera_serial)
+        new AprilTagAlign(m_drivetrain, m_camera_reader, m_camera_serial)
     );
 
     // Serial
@@ -89,7 +95,11 @@ atmt::Command* RobotContainer::getAutonomousCommand(int indicator, void* robot_c
         case 1:
             return new atmt::SequentialCommandGroup({
                 (new DriveCommand(self->m_drivetrain, 0.3, 0.0, 0.0))->withTimeout(2.0),
-                new ApproachAndAlign(self->m_drivetrain, self->m_camera_reader, self->m_camera_serial)
+                // new AprilTagAlign(self->m_drivetrain, self->m_camera_reader, self->m_camera_serial)
+                new SendSerialResumeCommand(self->m_esp_serial),
+                new WaitForSerialResumeCommand(self->m_esp_serial),
+                (new DriveCommand(self->m_drivetrain, -0.3, 0.0, 0.0))->withTimeout(2.0),
+                new SendSerialResumeCommand(self->m_esp_serial),
             });
         
         default:

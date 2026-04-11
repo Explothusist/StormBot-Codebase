@@ -46,9 +46,16 @@ void StormBot::environmentInit() {
 
 void StormBot::robotInit() {
     atmt::platform_print("Robot Init!           ");
+
+    // while (true) {
+    m_bot_cont->m_camera_serial->sendMessagePrefixedAll(Serial_ConnectToNetwork, NetworkIndicator::Network_Pit, 2);
+    // }
+    m_bot_cont->m_camera_serial->sendMessagePrefixedAll(Serial_ConnectToNetwork, NetworkIndicator::Network_Pit, 2);
+    m_bot_cont->m_camera_serial->sendMessagePrefixedAll(Serial_ConnectToNetwork, NetworkIndicator::Network_Pit, 2);
 };
 void StormBot::robotPeriodic() {
     atmt::platform_print("Robot Periodic...     ");
+    m_bot_cont->m_camera_serial->sendMessagePrefixedAll(Serial_ConnectToNetwork, NetworkIndicator::Network_Pit, 2); 
 };
 void StormBot::robotExit() {
     atmt::platform_print("Robot Exit            ");

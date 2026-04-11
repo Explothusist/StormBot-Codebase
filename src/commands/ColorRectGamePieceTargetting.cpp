@@ -1,44 +1,53 @@
 
-#include "AlignAndPounce.h"
+#include "ColorRectGamePieceTargetting.h"
 
 #include <cmath>
 
 #include "../Constants.h"
 
-AlignAndPounce::AlignAndPounce(Drivetrain* drivetrain, CameraReader* cameras):
+ColorRectGamePieceTargetting::ColorRectGamePieceTargetting(Drivetrain* drivetrain, CameraReader* cameras, atmt::SerialReader* serial):
     atmt::Command(),
     m_drivetrain{ drivetrain },
     m_cameras{ cameras },
+    m_serial{ serial },
     m_check_dist_counter{ 0 },
     m_last_dist{ -1 },
     m_invisibility_count{ 0 }
 {
     usesSubsystem(m_drivetrain);
 };
-AlignAndPounce::AlignAndPounce(AlignAndPounce& command):
+ColorRectGamePieceTargetting::ColorRectGamePieceTargetting(ColorRectGamePieceTargetting& command):
     atmt::Command(command)
 {
     m_drivetrain = command.m_drivetrain;
     m_cameras = command.m_cameras;
+    m_serial = command.m_serial;
 };
-AlignAndPounce::~AlignAndPounce() {
+ColorRectGamePieceTargetting::~ColorRectGamePieceTargetting() {
     // Will run ~Command() after this is complete
 };
-atmt::Command* AlignAndPounce::cloneSelf() const {
-    return new AlignAndPounce(m_drivetrain, m_cameras);
+atmt::Command* ColorRectGamePieceTargetting::cloneSelf() const {
+    return new ColorRectGamePieceTargetting(m_drivetrain, m_cameras, m_serial);
 };
 
-void AlignAndPounce::initialize() {
+void ColorRectGamePieceTargetting::initialize() {
 
 };
-void AlignAndPounce::execute() {
-    BoundingBox* object = m_cameras->getLargestScoringFront(); // TODO: Read multiple cameras 
+void ColorRectGamePieceTargetting::execute() {
+    BoundingBox* object = m_cameras->getLargestBatteryFront(); // TODO: Read multiple cameras 
+    // TagDetection* object = m_cameras->getLastTagDetection(TagCamera_Scoring);
+    // m_cameras->requestTagUpdate(TagCamera_Scoring, m_serial);
+
+    atmt::platform_println("ColorRectGamePieceTargetting Running");
 
     if (
         object != nullptr && 
+        // object->bounding_width >= constants::camera::Battery_Insignificant && 
+        // object->bounding_height >= constants::camera::Battery_Insignificant
         object->m_width >= constants::camera::Battery_Insignificant && 
         object->m_height >= constants::camera::Battery_Insignificant
     ) {
+        atmt::platform_println("ColorRectGamePieceTargetting Has Object Seen");
         m_invisibility_count = 0;
         if (
             m_last_dist == -1 || 
@@ -48,6 +57,7 @@ void AlignAndPounce::execute() {
         ) { // Check with more frequency as we get closer (because checking costs time)
             m_last_dist = getApproxDistance(object, constants::camera::Battery_Actual_Width, constants::camera::Battery_Actual_Height);
         }
+        // m_last_offset = object->x;
         m_last_offset = object->m_center_x;
 
         // int min_speed = object->m_center_x >= 0 ? constants::drivetrain::align::Min_Speed_To_Move : -constants::drivetrain::align::Min_Speed_To_Move;
@@ -89,11 +99,12 @@ void AlignAndPounce::execute() {
         m_drivetrain->stopDrive();
     }
 };
-void AlignAndPounce::end(bool interrupted) {
+void ColorRectGamePieceTargetting::end(bool interrupted) {
     m_drivetrain->stopDrive();
 };
-bool AlignAndPounce::is_finished() {
-    return 
-        (std::abs(m_last_dist) < constants::drivetrain::align::Pounce_Epsilon_FB && std::abs(m_last_offset) < constants::drivetrain::align::Pounce_Epsilon_LR) ||
-        (m_invisibility_count > 20);
+bool ColorRectGamePieceTargetting::is_finished() {
+    // return 
+    //     (std::abs(m_last_dist) < constants::drivetrain::align::Pounce_Epsilon_FB && std::abs(m_last_offset) < constants::drivetrain::align::Pounce_Epsilon_LR) ||
+    //     (m_invisibility_count > 20);
+    return false;
 };
