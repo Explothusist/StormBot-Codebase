@@ -24,7 +24,7 @@ AlignAndPounce::AlignAndPounce(AlignAndPounce& command):
 AlignAndPounce::~AlignAndPounce() {
     // Will run ~Command() after this is complete
 };
-atmt::Command* AlignAndPounce::clone() const {
+atmt::Command* AlignAndPounce::cloneSelf() const {
     return new AlignAndPounce(m_drivetrain, m_cameras);
 };
 
@@ -46,7 +46,7 @@ void AlignAndPounce::execute() {
             (m_last_dist <= constants::drivetrain::align::Pounce_Slow_At_Distance && m_check_dist_counter > 5) || 
             (m_last_dist <= constants::drivetrain::align::Pounce_Slow_At_Distance/2 && m_check_dist_counter > 2)
         ) { // Check with more frequency as we get closer (because checking costs time)
-            m_last_dist = object->getApproxDistance(constants::camera::Battery_Actual_Width, constants::camera::Battery_Actual_Height);
+            m_last_dist = getApproxDistance(object, constants::camera::Battery_Actual_Width, constants::camera::Battery_Actual_Height);
         }
         m_last_offset = object->m_center_x;
 

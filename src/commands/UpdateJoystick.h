@@ -1,6 +1,6 @@
 
-#ifndef STORMBOT_UPDATEAPRILTAGCOMMAND_
-#define STORMBOT_UPDATEAPRILTAGCOMMAND_
+#ifndef STORMBOT_UPDATEJOYSTICKCOMMAND_
+#define STORMBOT_UPDATEJOYSTICKCOMMAND_
 
 #include "../Automat/automat.h"
 
@@ -9,7 +9,7 @@ class UpdateJoystick : public atmt::Command {
         UpdateJoystick(atmt::SerialReader* serial, atmt::Joystick* controller); // Put subsystems as parameters
         UpdateJoystick(UpdateJoystick& command); // Copy constructor
         ~UpdateJoystick();
-        atmt::Command* clone() const override;
+        atmt::Command* cloneSelf() const override;
 
         void initialize() override; // User-made
         void execute() override; // User-made

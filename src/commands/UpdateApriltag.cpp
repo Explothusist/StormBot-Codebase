@@ -11,7 +11,7 @@ UpdateApriltag::UpdateApriltag(atmt::SerialReader* serial, CameraReader* camera_
     m_tag_camera{ camera }
 {
     // Does not use CameraReader* at the moment (somewhat risky)
-    usesSubsystem(serial);
+    // usesSubsystem(serial);
 };
 UpdateApriltag::UpdateApriltag(UpdateApriltag& command):
     atmt::Command(command)
@@ -23,7 +23,7 @@ UpdateApriltag::UpdateApriltag(UpdateApriltag& command):
 UpdateApriltag::~UpdateApriltag() {
     // Will run ~Command() after this is complete
 };
-atmt::Command* UpdateApriltag::clone() const {
+atmt::Command* UpdateApriltag::cloneSelf() const {
     return new UpdateApriltag(m_serial, m_camera_reader, m_tag_camera);
 };
 

@@ -6,8 +6,8 @@
 WaitForSerialResumeCommand::WaitForSerialResumeCommand(atmt::SerialReader* serial): // Side to side movements
     atmt::Command(),
     m_serial{ serial },
-    m_resume_triggered{ false },
-    m_last_seen_id{ 0 }
+    m_last_seen_id{ 0 },
+    m_resume_triggered{ false }
 {
     
 };
@@ -19,7 +19,7 @@ WaitForSerialResumeCommand::WaitForSerialResumeCommand(const WaitForSerialResume
 WaitForSerialResumeCommand::~WaitForSerialResumeCommand() {
     // Will run ~Command() after this is complete
 };
-atmt::Command* WaitForSerialResumeCommand::clone() const {
+atmt::Command* WaitForSerialResumeCommand::cloneSelf() const {
     return new WaitForSerialResumeCommand(m_serial);
 };
 

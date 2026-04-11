@@ -20,7 +20,7 @@ TeleopDriveCommand::TeleopDriveCommand(TeleopDriveCommand& command):
 TeleopDriveCommand::~TeleopDriveCommand() {
     // Will run ~Command() after this is complete
 };
-atmt::Command* TeleopDriveCommand::clone() const {
+atmt::Command* TeleopDriveCommand::cloneSelf() const {
     return new TeleopDriveCommand(m_drivetrain, m_driver_controller);
 };
 

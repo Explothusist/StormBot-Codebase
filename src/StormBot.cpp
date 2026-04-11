@@ -27,6 +27,10 @@ void StormBot::environmentInit() {
     addJoystick(m_bot_cont->m_driver_controller);
     // addJoystick(m_bot_cont->m_operator_controller);
 
+    // Set up Serial
+    // addSerialReader(m_bot_cont->m_camera_serial);
+    addSerialReader(m_bot_cont->m_esp_serial);
+
     // Set up Autonomous
     // setAutonomousCommand(m_bot_cont->getAutonomousCommand(0, m_bot_cont));
     setAutonomousCommandGetter(RobotContainer::getAutonomousCommand, RobotContainer::getWhichAutonomousRoutine, m_bot_cont);
