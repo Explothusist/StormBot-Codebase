@@ -19,7 +19,7 @@ Wheel::~Wheel() {
 };
 
 void Wheel::init() {
-    m_motor = new vex::motor(constants::ports::MotorBL_Port, vex::gearSetting::ratio18_1, false);
+    m_motor = new vex::motor(constants::ports::Wheel_Port, vex::gearSetting::ratio18_1, false);
 
 };
 void Wheel::systemPeriodic() {
