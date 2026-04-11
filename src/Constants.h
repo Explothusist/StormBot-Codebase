@@ -62,6 +62,11 @@ namespace constants {
             double const Pounce_Epsilon_FB = 2.0;
         };
     };
+
+    namespace wheel {
+        const int RPM0 = 0, RPM20 = 20, RPM30 = 30, RPM40 = 40, RPM50 = 50;
+
+    };
     
     namespace camera {
         int const Camera_Viewport_Width = 320; // In camera pixels
