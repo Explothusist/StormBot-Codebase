@@ -11,10 +11,12 @@
 #include "commands/UpdateApriltag.h"
 #include "commands/SendSerialResumeCommand.h"
 #include "commands/WaitForSerialResumeCommand.h"
+#include "commands/WheelCommand.h"
 
 RobotContainer::RobotContainer():
     m_drivetrain{ new Drivetrain() },
     m_camera_reader{ new CameraReader() },
+    m_wheel{ new Wheel() },
 #ifdef STORMBOT_USE_VEX_CONTROLLER_
     m_driver_controller{ new atmt::Joystick(atmt::PollMode_Continuous, atmt::PrimaryJoystick) },
 #endif
@@ -40,14 +42,14 @@ void RobotContainer::configure_auto_triggers() {
     m_driver_controller->bindAutoTrigger(new atmt::Trigger(atmt::AButton, atmt::ButtonPressed));
 };
 void RobotContainer::configure_bindings() {
-    m_driver_controller->bindKey(
-        (new atmt::Trigger(atmt::R1Button, atmt::ButtonPressed))->setType(atmt::WhileTrigger),
-        new ColorRectGamePieceTargetting(m_drivetrain, m_camera_reader, m_camera_serial)
-    );
-    m_driver_controller->bindKey(
-        (new atmt::Trigger(atmt::AButton, atmt::ButtonPressed))->setType(atmt::WhileTrigger),
-        new ColorRectGamePieceTargetting(m_drivetrain, m_camera_reader, m_camera_serial)
-    );
+    // m_driver_controller->bindKey(
+    //     (new atmt::Trigger(atmt::R1Button, atmt::ButtonPressed))->setType(atmt::WhileTrigger),
+    //     new ColorRectGamePieceTargetting(m_drivetrain, m_camera_reader, m_camera_serial)
+    // );
+    // m_driver_controller->bindKey(
+    //     (new atmt::Trigger(atmt::AButton, atmt::ButtonPressed))->setType(atmt::WhileTrigger),
+    //     new ColorRectGamePieceTargetting(m_drivetrain, m_camera_reader, m_camera_serial)
+    // );
     m_driver_controller->bindKey(
         (new atmt::Trigger(atmt::L1Button, atmt::ButtonPressed))->setType(atmt::WhileTrigger),
         new AprilTagAlign(m_drivetrain, m_camera_reader, m_camera_serial)
@@ -81,6 +83,11 @@ void RobotContainer::configure_bindings() {
         new UpdateApriltag(m_camera_serial, m_camera_reader, TagCamera_Scoring)
     );
 #endif
+
+    m_driver_controller->bindKey(
+        (new atmt::Trigger(atmt::R1Button, atmt::ButtonPressed))->setType(atmt::WhileTrigger),
+        new WheelCommand(m_wheel, 50)
+    );
     
     // Default Commands
     m_drivetrain->setDefaultCommand(new TeleopDriveCommand(m_drivetrain, m_driver_controller));
@@ -102,11 +109,14 @@ atmt::Command* RobotContainer::getAutonomousCommand(int indicator, void* robot_c
                 new SendSerialResumeCommand(self->m_esp_serial),
             });
         
+        case 2:
+            return (new DriveCommand(self->m_drivetrain, -0.3, 0.0, 0.0))->withTimeout(3.0);
+        
         default:
             return new atmt::EmptyCommand();
     }
 };
 int RobotContainer::getWhichAutonomousRoutine(void* robot_container) {
     // RobotContainer* self = static_cast<RobotContainer*>(robot_container);
-    return 0;
+    return 2;
 };

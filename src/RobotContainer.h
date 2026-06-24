@@ -9,6 +9,7 @@
 
 #include "subsystems/Drivetrain.h"
 #include "subsystems/CameraReader.h"
+#include "subsystems/Wheel.h"
 
 class RobotContainer {
     public:
@@ -23,6 +24,7 @@ class RobotContainer {
 
         Drivetrain* m_drivetrain; // public because they are for Robot.cpp
         CameraReader* m_camera_reader;
+        Wheel* m_wheel;
 
         atmt::Joystick* m_driver_controller;
         // atmt::Joystick* m_operator_controller;
